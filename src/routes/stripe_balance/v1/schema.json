@@ -1,0 +1,19 @@
+{
+  "metadata": {
+    "workflows_module_schema_version": "1.0.0"
+  },
+  "fields": [
+    {
+      "id": "api_key",
+      "type": "integer",
+      "label": "api_key",
+      "validation": {
+        "required": true
+      },
+      "ui_options": {
+        "ui_widget": "input"
+      }
+    }
+  ]
+ 
+}

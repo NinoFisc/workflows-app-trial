@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "workflows_module_schema_version": "1.0.0"
+  },
+  "fields": [
+    {
+      "type": "string",
+      "id": "single_input",
+      "label": "Single Input",
+      "description": "Enter your value here",
+      "default": "",
+      "ui_options": {
+        "ui_widget": "input"
+      },
+      "validation": {
+        "required": true
+      }
+    }
+  ],
+  "ui_options": {
+    "ui_order": [
+      "single_input"
+    ]
+  }
+}
+
+

@@ -1,0 +1,91 @@
+{
+  "metadata": {
+    "workflows_module_schema_version": "1.0.0"
+  },
+  "fields": [
+    
+    {
+      "type": "object",
+      "id": "object_type",
+      "label": "First currency",
+      "description": "The type of contact to create in your CRM",
+      "ui_options": {
+        "ui_widget": "SelectWidget"
+      },
+      "choices": {
+        "values": [
+          {
+            "value": "EURO",
+            "label": "EURO"
+          },
+          {
+            "value": "DOLLAR",
+            "label": "DOLLAR"
+          }
+        ]
+      },
+
+      "validation": {
+        "required": true
+        
+      }
+      
+      
+      },
+    
+
+    {
+      "type":"object",
+      "id":"object_types1",
+      "label":"Second currency",
+      "description":"The type of contact to create in your CRM",
+      "ui_options": {
+        "ui_widget": "SelectWidget"
+      },
+      "choices": {
+        "values": [
+          {
+            "value": "EURO",
+            "label": "EURO"
+          },
+          {
+            "value": "DOLLAR",
+            "label": "DOLLAR"
+          }
+        ]
+      },
+      "content": {
+        "type": ["managed"],
+        "content_objects": [
+          {
+            "id": "object_types"
+          }
+        ]
+      },
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "type":"integer",
+      "id":"object_types2",
+      "label":"Amount"
+
+    }
+    
+    
+    
+    
+  ],
+  "ui_options": {
+    "ui_order": [
+
+      "object_type",
+      "object_types1",
+      "object_types2"
+
+      
+      
+    ]
+  }
+}
