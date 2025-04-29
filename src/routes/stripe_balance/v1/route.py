@@ -5,7 +5,7 @@ from main import router
 
 
 
-@router.route("/execute", methods=["GET", "POST"])
+@router.route("/execute", methods=["GET"])
 def execute():
     try:
         request = Request(flask_request)
@@ -31,7 +31,8 @@ def execute():
 
     output = [balance]
 
-    return Response(data=output, metadata={"affected_rows": len(output)})
+    return Response(data=output, metadata={"affected_rows": len(output)}, status_code=200
+                    )
 
 
 

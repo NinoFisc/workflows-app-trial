@@ -1,0 +1,3 @@
+module_settings:
+  module_name: "stripe GET balance transaction"
+  module_description: "stripe GET balance transaction"

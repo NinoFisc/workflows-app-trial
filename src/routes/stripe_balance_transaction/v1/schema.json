@@ -5,13 +5,9 @@
   "fields": [
     {
       "type": "string",
-      "id": "single_input",
-      "label": "Single Input",
-      "description": "Enter your value here",
-      "default": "",
-      "ui_options": {
-        "ui_widget": "input"
-      },
+      "id": "api_key",
+      "label": "api_key",
+      
       "validation": {
         "required": true
       }
@@ -19,7 +15,7 @@
   ],
   "ui_options": {
     "ui_order": [
-      "single_input"
+      "api_key"
     ]
   }
 }
