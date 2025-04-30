@@ -5,11 +5,12 @@ from main import router
 
 
 
-@router.route("/execute", methods=["GET"])
+@router.route("/execute", methods=["GET","POST"])
 def execute():
     try:
-        request = Request(flask_request)
-        data = request.get_json()
+        
+        Request = Request(flask_request)
+        data = Request.get_json()
         api_key = data.get("api_key")
 
         stripe.api_key = api_key

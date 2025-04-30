@@ -5,14 +5,12 @@
   "fields": [
     {
       "id": "api_key",
-      "type": "integer",
+      "type": "string",
       "label": "api_key",
       "validation": {
         "required": true
-      },
-      "ui_options": {
-        "ui_widget": "input"
       }
+      
     }
   ]
  
