@@ -1,0 +1,3 @@
+module_settings:
+  module_name: "Stripe Customer"
+  module_description: "Stripe Customer module for managing customer data."
