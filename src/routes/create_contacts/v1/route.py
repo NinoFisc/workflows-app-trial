@@ -55,6 +55,7 @@ def content():
                     "data": object_types
                 })
                 
+                
             # Fields for the selected object type
             elif content_name == "fields":
                 # Get the selected object type from form data

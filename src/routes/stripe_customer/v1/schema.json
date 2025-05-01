@@ -54,9 +54,53 @@
     }
 
 
+   },
+   {
+    "id": "customer_name",
+    "type": "string",
+    "label": "Customer Name",
+    "ui_options":{
+      "visible_if": {
+        "action.value": "create"
+      }
+    }
+   },
+   {
+    "id": "customer_email",
+    "type": "string",
+    "label": "Customer Email",
+    "ui_options":{
+      "visible_if": {
+        "action.value": "create"
+      }
+    }
+   },
+   {
+    "type": "connection",
+    "id": "crm_connection",
+    "label": "CRM Connection",
+    "allowed_app_types": ["salesforce", "hubspot"],
+    "allowed_connection_management_types": ["managed", "custom"],
+      "validation": {
+        "required": true
+      },
+    "ui_options": {
+      "visible_if":{
+        "action.value":"create"
+      }
+    }
+
+
    }
+   
   ],
-  "ui_options": {
-    "ui_order": ["first_field", "second_field"]
+  "ui_option": {
+    "ui_order": [
+      "action"
+    ]
+      
+      
+    
   }
+  
 }
