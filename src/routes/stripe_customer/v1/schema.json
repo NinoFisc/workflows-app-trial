@@ -13,40 +13,29 @@
       
     },
    {
-    "type": "object",
+    "type": "string",
     "id":"action",
-    "label": "Customer_action",
-    "ui_options": {
-      "ui_widget": "SelectWidget"
+    "label": "Customer Action",
+    "ui_options":{
+      "ui_widget" :"SelectWidget"
     },
     "choices": {
-      "values": [
+      "values":[
         {
-          "value": "create",
-          "label": "Create"
+          "value": "create"
         },
         {
-          "value": "update",
-          "label": "Update"
+          "value":"retrieve"
         },
         {
-          "value": "retrieve",
-          "label": "Retrieve"
-        },
-        
-        {
-          "value": "list",
-          "label": "List"
+          "value": "liste"  
         },
         {
-          "value": "delete",
-          "label": "Delete"
+          "value":"delete"
         },
         {
-          "value": "search",
-          "label": "Search"
+          "value":"update"
         }
-        
       ]
     },
     "validation": {
@@ -55,26 +44,7 @@
 
 
    },
-   {
-    "id": "customer_name",
-    "type": "string",
-    "label": "Customer Name",
-    "ui_options":{
-      "visible_if": {
-        "action.value": "create"
-      }
-    }
-   },
-   {
-    "id": "customer_email",
-    "type": "string",
-    "label": "Customer Email",
-    "ui_options":{
-      "visible_if": {
-        "action.value": "create"
-      }
-    }
-   },
+   
    {
     "type": "connection",
     "id": "crm_connection",
@@ -93,14 +63,10 @@
 
    }
    
-  ],
-  "ui_option": {
-    "ui_order": [
-      "action"
-    ]
-      
+  ]
+}
+  
       
     
-  }
+ 
   
-}
