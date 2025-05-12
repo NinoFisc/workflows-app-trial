@@ -1,38 +1,42 @@
-from workflows_cdk import Response, Request
+import json
+from typing import Dict, Any, List
 from flask import request as flask_request
+from workflows_cdk import Response, Request, ManagedError
 from main import router
-import requests
+import stripe 
+
+
 
 @router.route("/execute", methods=["GET", "POST"])
 def execute():
-    """
-    This is the function that is executed when you click on "Run" on a workflow that uses this action.
-    """
-    try:
-        url = "https://fakestoreapi.com/users"
 
-        e = requests.get(url)
+    req = Request(flask_request)
+    data = req.data
 
-    # The data object of request.data will contain all of the fields filled in the form and defined in the schema.json file.
+    api_key = data.get("api_key")
+
+    test  = data.get("form_data", {})
+    if not test:
+        raise ManagedError("form_data is required")
+    
+
+    object_type = data.get("object_type")
+    if not object_type:
+        raise ManagedError("Object_type is required",  status_code = 404)
+    
+    if object_type == "Customer":
+        a = 0
+    if object_type == "Charge":
+        b = 0 
+    
+    
+    
+    
    
 
-    # Your logic here
-    # Here you can add your logic to execute the action which may consist of, for example:
-    # - calling an API
-    # - doing some calculations
-    # - doing some data transformations
-    # - validating data
-    
-        
-        response = e.json()
-        return Response(data=response, metadata={"affected_rows": len(response)})
-    except Exception as e:
-        # If an error occurs, you can return a response with the error message
-        return Response.error(str(e))
 
-    output = [response]
 
-    return Response(data=output, metadata={"affected_rows": len(output)})
+    return Response(data=test, status_code=200)
 
 
 @router.route("/content", methods=["GET", "POST"])

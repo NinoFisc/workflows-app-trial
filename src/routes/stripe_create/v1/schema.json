@@ -1,0 +1,73 @@
+{
+  "metadata": {
+    "workflows_module_schema_version": "1.0.0"
+  },
+  "fields": [ {
+    
+    "type": "connection",
+    "id": "crm_connection",
+    "label": "CRM Connection",
+    "allowed_app_types": ["salesforce", "hubspot"],
+    "allowed_connection_management_types": ["managed", "custom"],
+      "validation": {
+        "required": true
+      }
+    
+   },
+    {
+      "id": "api_key",
+      "type": "string",
+      "label": "api_key",
+      "validation": {
+        "required": true
+      }
+      
+    },
+   {
+    "type": "string",
+    "id":"object_type",
+    "label": "Object Type",
+    "ui_options":{
+      "ui_widget" :"SelectWidget"
+    },
+    "choices": {
+      "values":[
+        {
+          "value": "Customer"
+        },
+        {
+          "value":"Charge"
+        }
+      ]
+    },
+    "validation": {
+      "required": true
+    }
+
+
+   },
+   {
+    "type": "string",
+    "id":"customer_name",
+    "label": "customer name",
+    "validation": {
+      "required": true
+    },
+    "ui_options": {
+      "visible_if": {
+        "field": "object_type",
+        "operator": "equals",
+        "value": "Customer"
+      }
+    }
+   }
+   
+   
+   
+  ]
+}
+  
+      
+    
+ 
+  

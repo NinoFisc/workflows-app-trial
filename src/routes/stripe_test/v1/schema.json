@@ -1,0 +1,51 @@
+{
+  "metadata": {
+    "workflows_module_schema_version": "1.0.0"
+  },
+  "fields": [
+    {
+      "type": "string",
+      "id": "category",
+      "label": "Select Category",
+      "ui_options": {
+        "ui_widget": "SelectWidget"
+      },
+      "choices": {
+        "values": [
+          {
+            "value": "fruits",
+            "label": "Fruits"
+          },
+          {
+            "value": "vegetables",
+            "label": "Vegetables"
+          }
+        ]
+      },
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "type": "string",
+      "id": "subcategory",
+      "label": "Select Subcategory",
+      "ui_options": {
+        "ui_widget": "SelectWidget"
+      },
+      "content": {
+        "type ": ["managed"],
+        "content_objects": [
+          {
+            "id": "subcategories"
+          }
+        ]
+      },
+      "validation": {
+        "required": true
+      }
+    }
+  ]
+}
+
+

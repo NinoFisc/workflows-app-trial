@@ -1,14 +1,13 @@
 from workflows_cdk import Response, Request
 from flask import request as flask_request
-from flask import stripe 
+
 from main import router
 
 
 
 @router.route("/execute", methods=["GET","POST"])
 def execute():
-    try:
-        
+            
         Request = Request(flask_request)
         data = Request.get_json()
         api_key = data.get("api_key")
@@ -16,8 +15,9 @@ def execute():
         stripe.api_key = api_key
         balance = stripe.Balance.retrieve() 
         
-    except Exception as e:
-        return Response(data={"error": str(e)}, status_code=500)
+
+
+        
     
 
 
@@ -30,10 +30,9 @@ def execute():
     # - validating data
     
 
-    output = [balance]
+        output = [balance]
 
-    return Response(data=output, metadata={"affected_rows": len(output)}, status_code=200
-                    )
+        return Response(data=output, metadata={"affected_rows": len(output)}, status_code=200)
 
 
 

@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "workflows_module_schema_version": "1.0.0"
+  },
+  "fields": [
+    {
+      "type": "string",
+      "id": "object_type",
+      "label": "Select Object Type",
+      "ui_options": {
+        "ui_widget": "SelectWidget"
+      },
+      "choices": {
+        "values": [
+          {
+            "value": "Customer",
+            "label": "Customer"
+          },
+          {
+            "value": "Charge",
+            "label": "Charge"
+          }
+        ]
+      },
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "type": "string",
+      "id": "field_name",
+      "label": "Select Field Name",
+      "ui_options": {
+        "ui_widget": "SelectWidget"
+      },
+      "content": {
+        "type ": ["managed"],
+        "content_objects": [
+          {
+            "id": "fields"
+          }
+        ]
+      },
+      "validation": {
+        "required": true
+      }
+    }
+  ]
+} 
