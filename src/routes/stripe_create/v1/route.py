@@ -1,117 +1,106 @@
-import json
-from typing import Dict, Any, List
 from flask import request as flask_request
-from workflows_cdk import Response, Request, ManagedError
+from workflows_cdk import Response, Request
 from main import router
-import stripe 
+import stripe
 
 
+@router.route("/content", methods=["POST"])
+def content():
+    request = Request(flask_request)
+    data = request.data
+    
+    form_data = data.get("form_data")
+    
+    object_type = form_data.get("object_type")
+    
 
-@router.route("/execute", methods=["GET", "POST"])
+    print("---------------------")
+
+    print(str(object_type))
+    print("---------------------")
+
+    options = []
+    
+    
+    # Define options based on category
+    if object_type == "Customer":
+        options = [
+        {"value": "name", "label":"Name"},
+        {"value":"email", "label":"Email"},
+        {"value":"description", "label":"Description"},
+
+        ]
+    elif object_type == "Charge":
+        options = [
+            {"value":"customer", "label": "Customer_id"},
+            {"value": "amount", "label": "Amount"},
+            {"value": "currency", "label": "Currency"},
+            {"value": "source", "label": "Source"},
+            {"value": "description", "label": "Description"}
+            
+
+        ]
+    # Return the options
+    return Response(data={
+        "content_objects": [{
+            "content_object_name": "fields",
+            "data": options
+        }]
+    })
+
+@router.route("/execute", methods=["POST", "GET"])
 def execute():
+    request = Request(flask_request)
+    data = request.data
+    
+    object_type = data.get("object_type")
+    print("---------")
+    print(object_type)
+    print("---------")
 
-    req = Request(flask_request)
-    data = req.data
+    fields = data.get("fields")
+
+    print("---------------")
+    print(fields)
+    print("---------------")
+
 
     api_key = data.get("api_key")
 
-    test  = data.get("form_data", {})
-    if not test:
-        raise ManagedError("form_data is required")
+    print("---------------")
+    print(api_key)
+    print("---------------")
+
+    stripe.api_key = api_key
+    
     
 
-    object_type = data.get("object_type")
-    if not object_type:
-        raise ManagedError("Object_type is required",  status_code = 404)
-    
+    field_value = {}
+
+    for field in fields:
+        name = field.get("field_name")
+        value = field.get("field_value")
+        field_value[name]= value
+
     if object_type == "Customer":
-        a = 0
+    
+        customer = stripe.Customer.create(**field_value)
+        return Response(data=customer)
+
+
     if object_type == "Charge":
-        b = 0 
+        charge = stripe.Charge.create(**field_value)
+        return Response(data=charge)
+
+
+
+
+
     
+
+
+
+
     
-    
-    
-   
-
-
-
-    return Response(data=test, status_code=200)
-
-
-@router.route("/content", methods=["GET", "POST"])
-def content():
-    """
-    This is the function that goes and fetches the necessary data to populate the possible choices in dynamic form fields.
-    For example, if you have a module to delete a contact, you would need to fetch the list of contacts to populate the dropdown
-    and give the user the choice of which contact to delete.
-
-    An action's form may have multiple dynamic form fields, each with their own possible choices. Because of this, in the /content route,
-    you will receive a list of content_object_names, which are the identifiers of the dynamic form fields. A /content route may be called for one or more content_object_names.
-
-    Every data object takes the shape of:
-    {
-        "value": "value",
-        "label": "label"
-    }
-    
-    Args:
-        data:
-            form_data:
-                form_field_name_1: value1
-                form_field_name_2: value2
-            content_object_names:
-                [
-                    {   "id": "content_object_name_1"   }
-                ]
-        credentials:
-            connection_data:
-                value: (actual value of the connection)
-
-    Return:
-        {
-            "content_objects": [
-                {
-                    "content_object_name": "content_object_name_1",
-                    "data": [{"value": "value1", "label": "label1"}]
-                },
-                ...
-            ]
-        }
-    """
-    request = Request(flask_request)
-
-    data = request.data
-
-    form_data = data.get("form_data", {})
-    content_object_names = data.get("content_object_names", [])
-    
-    # Extract content object names from objects if needed
-    if isinstance(content_object_names, list) and content_object_names and isinstance(content_object_names[0], dict):
-        content_object_names = [obj.get("id") for obj in content_object_names if "id" in obj]
-
-    content_objects = [] # this is the list of content objects that will be returned to the frontend
-
-    for content_object_name in content_object_names:
-        if content_object_name == "requested_content_object_1":
-            # logic here
-            data = [
-                {"value": "value1", "label": "label1"},
-                {"value": "value2", "label": "label2"}
-            ]
-            content_objects.append({
-                    "content_object_name": "requested_content_object_1",
-                    "data": data
-                })
-        elif content_object_name == "requested_content_object_2":
-            # logic here
-            data = [
-                {"value": "value1", "label": "label1"},
-                {"value": "value2", "label": "label2"}
-            ]
-            content_objects.append({
-                    "content_object_name": "requested_content_object_2",
-                    "data": data
-                })
-    
-    return Response(data={"content_objects": content_objects})
+  
+    return Response(data="") 

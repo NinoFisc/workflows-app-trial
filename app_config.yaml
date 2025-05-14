@@ -1,6 +1,6 @@
 app_settings:
-  app_type: "connector" # only lowercase letters, numbers, and underscores are allowed, e.g. salesforce, sap, zoho_crm, etc.
-  app_name: "Connector Example App"
+  app_type: "stripe" # only lowercase letters, numbers, and underscores are allowed, e.g. salesforce, sap, zoho_crm, etc.
+  app_name: "Stripe DEV"
   app_icon_svg_url: "https://cdn.brandfetch.io/id9Bpy_H9O/theme/dark/idl_D0lOl6.svg?c=1dxbfHSJFAPEGdCLU4o5B" # this is the icon of the app, should be a URL pointing to a SVG file.
   app_description: "Connector Example App"
   routes_directory: "src/routes" # this is the directory where the routes are located.

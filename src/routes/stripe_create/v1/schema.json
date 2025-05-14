@@ -2,72 +2,73 @@
   "metadata": {
     "workflows_module_schema_version": "1.0.0"
   },
-  "fields": [ {
-    
-    "type": "connection",
-    "id": "crm_connection",
-    "label": "CRM Connection",
-    "allowed_app_types": ["salesforce", "hubspot"],
-    "allowed_connection_management_types": ["managed", "custom"],
-      "validation": {
-        "required": true
-      }
-    
-   },
+  "fields": [
     {
-      "id": "api_key",
       "type": "string",
-      "label": "api_key",
+      "id": "api_key",
+      "label": "API Key"
+    },
+    {
+      "type": "string",
+      "id": "object_type",
+      "label": "Select Object Type",
+      "ui_options": {
+        "ui_widget": "SelectWidget"
+      },
+      "choices": {
+        "values": [
+          {
+            "value": "Customer",
+            "label": "Customer"
+          },
+          {
+            "value": "Charge",
+            "label": "Charge"
+          }
+        ]
+      },
       "validation": {
         "required": true
       }
-      
     },
-   {
-    "type": "string",
-    "id":"object_type",
-    "label": "Object Type",
-    "ui_options":{
-      "ui_widget" :"SelectWidget"
-    },
-    "choices": {
-      "values":[
-        {
-          "value": "Customer"
+    {
+      "type":"array",
+      "id":"fields",
+      "label":"Fields",
+      "items":{
+        "type":"object",
+        "ui_options": {
+          "ui_layout":{
+            "type": "horizontal",
+            "elements":["field_name","field_value"]
+          }
         },
-        {
-          "value":"Charge"
-        }
-      ]
-    },
-    "validation": {
-      "required": true
-    }
-
-
-   },
-   {
-    "type": "string",
-    "id":"customer_name",
-    "label": "customer name",
-    "validation": {
-      "required": true
-    },
-    "ui_options": {
-      "visible_if": {
-        "field": "object_type",
-        "operator": "equals",
-        "value": "Customer"
+        "fields":[
+          {
+            "type": "string",
+            "id": "field_name",
+            "label": "Select Field Name",
+            "ui_options": {
+              "ui_widget": "SelectWidget"
+            },
+            "content": {
+              "type ": ["managed"],
+              "content_objects": [
+                {
+                  "id": "fields"
+                }
+              ]
+            }
+          },
+          {
+            "type": "string",
+            "id": "field_value",
+            "label": "Value"
+          }
+        ]
       }
     }
-   }
-   
-   
-   
-  ]
-}
-  
-      
     
- 
-  
+    
+  ]
+} 
