@@ -83,13 +83,13 @@ def execute():
         value = field.get("field_value")
         field_value[name]= value
 
-    if object_type == "Customer":
+    if object_type == "customer":
     
         customer = stripe.Customer.create(**field_value)
         return Response(data=customer)
 
 
-    if object_type == "Charge":
+    if object_type == "charge":
         charge = stripe.Charge.create(**field_value)
         return Response(data=charge)
 

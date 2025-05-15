@@ -179,15 +179,8 @@ OBJECT_TYPE = [
                     "required_fields": [
                         {"value": "amount", "label": "Amount"},
                         {"value": "currency", "label": "Currency"},
-                        {
-                            "name": "payment_source",
-                            "type": "either",
-                            "fields": [
-                                {"value": "source", "label": "Source"},
-                                {"value": "customer", "label": "Customer"}
-                            ],
-                            "description": "Either source or customer must be provided"
-                        }
+                        {"value": "customer", "label": "Customer ID"},
+                        {"value": "source", "label": "Source"}
                     ],
                     "optional_fields": [
                         # Basic Information
