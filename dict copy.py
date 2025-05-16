@@ -199,14 +199,35 @@ OBJECT_TYPE = [
     }
 ]
 
+CREATE_OBJECT_TYPE = []
+UPDATE_OBJECT_TYPE = []
+RETRIEVE_OBJECT_TYPE = []
+LIST_OBJECT_TYPE = []
+CUSTOME_OBJECT_TYPE = []
 
 
 
+for obj in OBJECT_TYPE:
+    object_type = obj.get("object_type")
+    actions = obj.get("action")
+    for action in actions:
+        for key, fields in action.items():
+            if key == "create":
+                CREATE_OBJECT_TYPE.append(object_type)
+            elif key == "update":
+                UPDATE_OBJECT_TYPE.append(object_type)
+            elif key == "retrieve":
+                RETRIEVE_OBJECT_TYPE.append(object_type)
+            elif key == "list":
+                LIST_OBJECT_TYPE.append(object_type)
+            else:
+                CUSTOME_OBJECT_TYPE.append(object_type)
 
-
-
-
-
+print(CREATE_OBJECT_TYPE)
+print(UPDATE_OBJECT_TYPE)
+print(RETRIEVE_OBJECT_TYPE)
+print(LIST_OBJECT_TYPE)
+print(CUSTOME_OBJECT_TYPE)
 
 
 
