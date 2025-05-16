@@ -1,37 +1,30 @@
 {
-  "metadata": {
-    "workflows_module_schema_version": "1.0.0"
-  },
-  "fields": [
-    {
-      "type": "string",
-      "id": "api_key",
-      "label": "API Key"
+    "metadata": {
+      "workflows_module_schema_version": "1.0.0"
     },
-    {
-      "type": "string",
-      "id": "object_type",
-      "label": "Select Object Type",
-      "ui_options": {
-        "ui_widget": "SelectWidget"
+    "fields": [
+      {
+        "type": "string",
+        "id": "api_key",
+        "label": "API Key"
       },
-      "choices": {
-        "values": [
-          {
-            "value": "customer",
-            "label": "Customer"
-          },
-          {
-            "value": "charge",
-            "label": "Charge"
-          }
-        ]
-      },
-      "validation": {
-        "required": true
+      {
+        "type": "string",
+        "id": "object_type",
+        "label": "Select Object Type",
+        "ui_options": {
+          "ui_widget": "SelectWidget"
+        },
+        "on_action":{
+            "load_schema":true
+        },
+        "choices": {
+          "values": [
+          ]
+        },
+        "validation": {
+          "required": true
+        }
       }
-    }
-    
-    
-  ]
-} 
+    ]
+}

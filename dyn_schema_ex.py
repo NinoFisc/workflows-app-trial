@@ -441,3 +441,15 @@ def schema():
 
     
     return Response(data={"schema": base_schema})
+
+
+{
+    "choices": {
+        "values": [
+            {
+                "value": field["value"] if isinstance(field, dict) else field,
+                "label": field["label"] if isinstance(field, dict) else field.title()
+                                    } for field in (create_action.get("required_fields", []) + 
+                                                  create_action.get("optional_fields", []))
+                                ]
+                            }}

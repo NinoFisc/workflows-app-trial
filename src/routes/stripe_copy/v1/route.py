@@ -98,6 +98,7 @@ def execute():
 
 
 
+
 base_schema = {
   "metadata": {
     "workflows_module_schema_version": "1.0.0"
@@ -115,6 +116,9 @@ base_schema = {
       "ui_options": {
         "ui_widget": "SelectWidget"
       },
+      "on_action":{
+          "load_schema":True
+      },
       "choices": {
         "values": [
           {
@@ -131,7 +135,7 @@ base_schema = {
 }
 
 
-object_type_schema = {
+base_schema = {
   "metadata": {
     "workflows_module_schema_version": "1.0.0"
   },
@@ -139,7 +143,10 @@ object_type_schema = {
     {
       "type": "string",
       "id": "api_key",
-      "label": "API Key"
+      "label": "API Key",
+      "validation": {
+        "required": True
+      }
     },
     {
       "type": "string",
@@ -148,10 +155,13 @@ object_type_schema = {
       "ui_options": {
         "ui_widget": "SelectWidget"
       },
+      "on_action":{
+          "load_schema":True
+      },
       "choices": {
         "values": [
           {
-            "value": obj_type ,
+            "value": obj_type,
             "label": obj_type.title()  # This will capitalize the first letter
           } for obj_type in CREATE_OBJECT_TYPE
         ]
@@ -159,54 +169,100 @@ object_type_schema = {
       "validation": {
         "required": True
       }
-    },
-    {
-      "type":"array",
-      "id":"fields",
-      "label":"Fields",
-      "items":{
-        "type":"object",
-        "ui_options": {
-          "ui_layout":{
-            "type": "horizontal",
-            "elements":["field_name","field_value"]
-          }
-        },
-        "fields":[
-          {
-            "type": "string",
-            "id": "field_name",
-            "label": "Select Field Name",
-            "ui_options": {
-              "ui_widget": "SelectWidget"
-            },
-            "content": {
-              "type ": ["managed"],
-              "content_objects": [
-                {
-                  "id": "fields"
-                }
-              ]
-            }
-          },
-          {
-            "type": "string",
-            "id": "field_value",
-            "label": "Value"
-          }
-        ]
-      }
     }
   ]
-} 
+}
 
-
+object_type_schema = {
+    "metadata": {
+        "workflows_module_schema_version": "1.0.0"
+    },
+    "fields": [
+        {
+            "type": "string",
+            "id": "api_key",
+            "label": "API Key",
+            "validation": {
+                "required": True
+            }
+        },
+        {
+            "type": "string",
+            "id": "object_type",
+            "label": "Select Object Type",
+            "ui_options": {
+                "ui_widget": "SelectWidget"
+            },
+            "on_action": {
+                "load_schema": True
+            },
+            "choices": {
+                "values": [
+                    {
+                        "value": obj_type,
+                        "label": obj_type.title()
+                    } for obj_type in CREATE_OBJECT_TYPE
+                ]
+            },
+            "validation": {
+                "required": True
+            }
+        },
+        {
+            "type": "array",
+            "id": "field_inputs",
+            "label": "Field Values",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "field_name": {
+                        "type": "string",
+                        "label": "Field Name",
+                        "ui_options": {
+                            "ui_widget": "SelectWidget"
+                        },
+                        "content": {
+                            "type": ["managed"],
+                            "content_objects": [{
+                                "id": "fields"
+                            }]
+                        },
+                        "validation": {
+                            "required": True
+                        }
+                    },
+                    "field_value": {
+                        "type": "string",
+                        "label": "Field Value",
+                        "validation": {
+                            "required": True
+                        }
+                    }
+                }
+            },
+            "ui_options": {
+                "ui_layout": {
+                    "type": "horizontal",
+                    "elements": ["field_name", "field_value"]
+                }
+            },
+            "validation": {
+                "min_items": 1,
+                "message": "At least one field is required"
+            }
+        }
+    ],
+    "ui_options": {
+        "ui_order": [
+            "api_key",
+            "object_type",
+            "field_inputs"
+        ]
+    }
+}
 
 @router.route("/schema", methods=["POST"])
 def schema():
-
-    
-
     request = Request(flask_request)
 
     data = request.data
@@ -217,14 +273,20 @@ def schema():
 
 
     object_type = form_data.get("object_type")
-
-    print("object_type:", object_type)
     if not object_type:
         return Response(data={"schema":base_schema})
+
+    print("object_type:", object_type)
+    
     
     if object_type == "customer":
         return Response(data={"schema":object_type_schema})
     else: 
-        return Response(data={"schema":object_type_schema})
+        return Response(data={"schema":base_schema})
+
+    
+
+
+
 
     
