@@ -214,9 +214,10 @@ object_type_schema = {
             "label": "Field Values",
             "items": {
                 "type": "object",
-                "properties": {
-                    "field_name": {
+                "fields": [
+                    {
                         "type": "string",
+                        "id": "field_name",
                         "label": "Field Name",
                         "ui_options": {
                             "ui_widget": "SelectWidget"
@@ -231,21 +232,23 @@ object_type_schema = {
                             "required": True
                         }
                     },
-                    "field_value": {
+                    {
                         "type": "string",
+                        "id": "field_value",
                         "label": "Field Value",
                         "validation": {
                             "required": True
                         }
                     }
-                }
-            },
-            "ui_options": {
+                ], 
+                "ui_options": {
                 "ui_layout": {
                     "type": "horizontal",
                     "elements": ["field_name", "field_value"]
                 }
             },
+            },
+            
             "validation": {
                 "min_items": 1,
                 "message": "At least one field is required"
@@ -264,25 +267,20 @@ object_type_schema = {
 @router.route("/schema", methods=["POST"])
 def schema():
     request = Request(flask_request)
-
     data = request.data
-    print( "Data:",data, "\n -------------")
+    print("Data:", data, "\n -------------")
 
-    form_data =data.get("form_data")
+    form_data = data.get("form_data")
     print("Form data:", form_data, "\n------------")
-
 
     object_type = form_data.get("object_type")
     if not object_type:
-        return Response(data={"schema":base_schema})
+        return Response(data={"schema": base_schema})
 
     print("object_type:", object_type)
     
-    
-    if object_type == "customer":
-        return Response(data={"schema":object_type_schema})
-    else: 
-        return Response(data={"schema":base_schema})
+    # Return object_type_schema for all object types
+    return Response(data={"schema": object_type_schema})
 
     
 
