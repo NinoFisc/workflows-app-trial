@@ -39,6 +39,8 @@ def content():
 
     options = required_fields + optional_fields
 
+    print(options)
+
         
             
 
@@ -96,6 +98,23 @@ def execute():
 
     return Response(data="") 
 
+options = []
+
+index = 0
+
+for obj in OBJECT_TYPE:
+  if obj.get("object_type")=="customer":
+      index = OBJECT_TYPE.index(obj)
+
+object_type_actions = OBJECT_TYPE[index].get("action")
+
+for action in object_type_actions:
+  for action_key, action_value in action.items():
+      if action_key == module:
+          required_fields = action_value.get("required_fields")
+          optional_fields = action_value.get("optional_fields")
+
+options = required_fields + optional_fields
 
 
 
@@ -134,6 +153,9 @@ base_schema = {
   ]
 }
 
+field_inputs_default = [
+    {"field_name": opt["value"], "field_value": ""} for opt in options
+]
 
 base_schema = {
   "metadata": {
@@ -166,10 +188,45 @@ base_schema = {
           } for obj_type in CREATE_OBJECT_TYPE
         ]
       },
+      
       "validation": {
         "required": True
       }
+    },
+    {
+  "type": "array",
+  "id": "field_inputs",
+  "label": "Field Values",
+  "default": field_inputs_default,
+  "items": {
+    "type": "object",
+    "fields": [
+      {
+        "type": "string",
+        "id": "field_name",
+        "label": "Field Name",
+        "validation": {
+          "required": True
+        }
+      },
+      {
+        "type": "string",
+        "id": "field_value",
+        "label": "Field Value",
+        "validation": {
+          "required": True
+        }
+      }
+    ],
+    "ui_options": {
+      "ui_layout": {
+        "type": "horizontal",
+        "elements": ["field_name", "field_value"]
+      }
     }
+  }
+}
+    
   ]
 }
 
@@ -208,6 +265,9 @@ object_type_schema = {
                 "required": True
             }
         },
+
+
+    
         {
             "type": "array",
             "id": "field_inputs",
@@ -280,7 +340,7 @@ def schema():
     print("object_type:", object_type)
     
     # Return object_type_schema for all object types
-    return Response(data={"schema": object_type_schema})
+    return Response(data={"schema": base_schema})
 
     
 
