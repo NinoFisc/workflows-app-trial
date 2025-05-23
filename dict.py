@@ -201,8 +201,8 @@ OBJECT_TYPE = [
                         # Shipping Information
                         {"id": "shipping[name]", "label": "Shipping Recipient Name"},
                         {"id": "shipping[phone]", "label": "Shipping Phone Number"},
-                        {"id": "shipping_carrier", "label": "Shipping Carrier"},
-                        {"id": "shipping_tracking_number", "label": "Tracking Number"},
+                        {"id": "shipping[carrier]", "label": "Shipping Carrier"},
+                        {"id": "shipping[tracking_number]", "label": "Tracking Number"},
                         {"id": "shipping[address][line1]", "label": "Shipping Address Line 1"},
                         {"id": "shipping[address][line2]", "label": "Shipping Address Line 2"},
                         {"id": "shipping[address][city]", "label": "Shipping City"},
@@ -239,8 +239,8 @@ OBJECT_TYPE = [
                         # Shipping Information
                         {"id": "shipping[name]", "label": "Shipping Recipient Name"},
                         {"id": "shipping[phone]", "label": "Shipping Phone Number"},
-                        {"id": "shipping_carrier", "label": "Shipping Carrier"},
-                        {"id": "shipping_tracking_number", "label": "Tracking Number"},
+                        {"id": "shipping[carrier]", "label": "Shipping Carrier"},
+                        {"id": "shipping[tracking_number]", "label": "Tracking Number"},
                         {"id": "shipping[address][line1]", "label": "Shipping Address Line 1"},
                         {"id": "shipping[address][line2]", "label": "Shipping Address Line 2"},
                         {"id": "shipping[address][city]", "label": "Shipping City"},
@@ -436,6 +436,8 @@ OBJECT_TYPE = [
                     ],
                     "optional_fields": [
                         # Basic Information
+                        {"id": "amount", "label": "Amount in cents (minimum 50 cents)"},
+                        {"id": "currency", "label": "Three-letter ISO currency code (e.g., 'usd')"},
                         {"id": "description", "label": "Description of the payment"},
                         {"id": "metadata", "label": "Additional metadata"},
                         {"id": "receipt_email", "label": "Email for receipt"},
@@ -444,6 +446,7 @@ OBJECT_TYPE = [
                         
                         # Payment Method Configuration
                         {"id": "payment_method", "label": "Specific payment method to use"},
+                        {"id": "payment_method_types", "label": "List of payment method types to accept"},
                         {"id": "payment_method_data[type]", "label": "Type of payment method"},
                         {"id": "payment_method_data[billing_details][name]", "label": "Name on the payment method"},
                         {"id": "payment_method_data[billing_details][email]", "label": "Email for billing"},
@@ -456,12 +459,8 @@ OBJECT_TYPE = [
                         {"id": "payment_method_data[billing_details][address][country]", "label": "Billing country"},
                         
                         # Payment Method Options
-                        {"id": "payment_method_options", "label": "Payment method specific options"},
-                        {"id": "payment_method_options[card]", "label": "Card payment method options"},
-                        {"id": "payment_method_options[card][installments]", "label": "Card installments configuration"},
                         {"id": "payment_method_options[card][installments][enabled]", "label": "Enable card installments"},
                         {"id": "payment_method_options[card][installments][plan]", "label": "Installment plan type"},
-                        {"id": "payment_method_options[card][mandate_options]", "label": "Card mandate options"},
                         {"id": "payment_method_options[card][mandate_options][amount]", "label": "Mandate amount"},
                         {"id": "payment_method_options[card][mandate_options][amount_type]", "label": "Mandate amount type"},
                         {"id": "payment_method_options[card][mandate_options][currency]", "label": "Mandate currency"},
@@ -477,7 +476,6 @@ OBJECT_TYPE = [
                         {"id": "payment_method_options[card][verification_method]", "label": "Verification method for card"},
                         
                         # Automatic Payment Methods
-                        {"id": "automatic_payment_methods", "label": "Automatic payment methods configuration"},
                         {"id": "automatic_payment_methods[enabled]", "label": "Enable automatic payment methods"},
                         {"id": "automatic_payment_methods[allow_redirects]", "label": "Allow redirect-based payment methods"},
                         
@@ -493,11 +491,16 @@ OBJECT_TYPE = [
                         {"id": "confirmation_token", "label": "Confirmation token"},
                         {"id": "error_on_requires_action", "label": "Error on requires action"},
                         {"id": "mandate", "label": "Mandate ID for recurring payments"},
-                        {"id": "mandate_data", "label": "Mandate data for new mandates"},
+                        {"id": "mandate_data[customer_acceptance][type]", "label": "Customer acceptance type"},
+                        {"id": "mandate_data[customer_acceptance][online][ip]", "label": "IP address of acceptance"},
+                        {"id": "mandate_data[customer_acceptance][online][user_agent]", "label": "User agent of acceptance"},
+                        {"id": "mandate_data[customer_acceptance][offline]", "label": "Offline acceptance data"},
                         
                         # Shipping Information
                         {"id": "shipping[name]", "label": "Shipping Recipient Name"},
                         {"id": "shipping[phone]", "label": "Shipping Phone Number"},
+                        {"id": "shipping[carrier]", "label": "Shipping Carrier"},
+                        {"id": "shipping[tracking_number]", "label": "Tracking Number"},
                         {"id": "shipping[address][line1]", "label": "Shipping Address Line 1"},
                         {"id": "shipping[address][line2]", "label": "Shipping Address Line 2"},
                         {"id": "shipping[address][city]", "label": "Shipping City"},
@@ -508,45 +511,24 @@ OBJECT_TYPE = [
                         # Connect Specific
                         {"id": "application_fee_amount", "label": "Application fee amount"},
                         {"id": "on_behalf_of", "label": "Connected account ID"},
-                        {"id": "transfer_data", "label": "Transfer data configuration"},
-                        {"id": "transfer_data_destination", "label": "Transfer destination account"},
-                        {"id": "transfer_data_amount", "label": "Transfer amount"},
+                        {"id": "transfer_data[destination]", "label": "Transfer destination account"},
+                        {"id": "transfer_data[amount]", "label": "Transfer amount"},
                         {"id": "transfer_group", "label": "Transfer group identifier"},
                         
                         # Amount Details
-                        {"id": "amount_details", "label": "Amount details object"},
-                        {"id": "amount_details_tip", "label": "Tip amount details"},
-                        {"id": "amount_details_tip_amount", "label": "Tip amount value"},
-                        {"id": "amount_details_tip_amount_off_session", "label": "Off-session tip amount"},
-                        {"id": "amount_details_tip_amount_on_session", "label": "On-session tip amount"},
+                        {"id": "amount_details[tip][amount]", "label": "Tip amount value"},
                         
                         # Additional Settings
-                        {"id": "radar_options", "label": "Radar options configuration"},
-                        {"id": "radar_options_session", "label": "Radar session ID"},
+                        {"id": "radar_options[session]", "label": "Radar session ID"},
                         {"id": "return_url", "label": "Return URL after payment"},
                         {"id": "use_stripe_sdk", "label": "Use Stripe SDK flag"},
-                        {"id": "processing", "label": "Processing configuration"},
-                        {"id": "processing_type", "label": "Processing type"},
-                        {"id": "processing_card_present", "label": "Card present processing options"},
-                        {"id": "processing_card_present_request_extended_authorization", "label": "Request extended authorization"},
-                        {"id": "processing_card_present_request_incremental_authorization_support", "label": "Request incremental authorization support"},
-                        {"id": "processing_card_present_request_incremental_authorization", "label": "Request incremental authorization"},
-                        {"id": "processing_card_present_request_incremental_authorization_amount", "label": "Incremental authorization amount"},
-                        {"id": "processing_card_present_request_incremental_authorization_currency", "label": "Incremental authorization currency"},
-                        {"id": "processing_card_present_request_incremental_authorization_amount_off_session", "label": "Off-session incremental authorization amount"},
-                        {"id": "processing_card_present_request_incremental_authorization_amount_on_session", "label": "On-session incremental authorization amount"},
-                        {"id": "processing_card_present_request_incremental_authorization_amount_automatic", "label": "Automatic incremental authorization amount"},
-                        {"id": "processing_card_present_request_incremental_authorization_amount_suggested", "label": "Suggested incremental authorization amount"},
-                        {"id": "processing_card_present_request_incremental_authorization_amount_manual", "label": "Manual incremental authorization amount"},
-                        {"id": "processing_card_present_request_incremental_authorization_amount_manual_amount", "label": "Manual incremental authorization amount value"},
-                        {"id": "processing_card_present_request_incremental_authorization_amount_manual_currency", "label": "Manual incremental authorization amount currency"},
-                        {"id": "processing_card_present_request_incremental_authorization_amount_manual_amount_off_session", "label": "Manual off-session incremental authorization amount"},
-                        {"id": "processing_card_present_request_incremental_authorization_amount_manual_amount_on_session", "label": "Manual on-session incremental authorization amount"},
-                        {"id": "processing_card_present_request_incremental_authorization_amount_manual_amount_automatic", "label": "Manual automatic incremental authorization amount"},
-                        {"id": "processing_card_present_request_incremental_authorization_amount_manual_amount_suggested", "label": "Manual suggested incremental authorization amount"},
-                        {"id": "processing_card_present_request_incremental_authorization_amount_manual_amount_manual", "label": "Manual manual incremental authorization amount"},
-                        {"id": "processing_card_present_request_incremental_authorization_amount_manual_amount_manual_amount", "label": "Manual manual incremental authorization amount value"},
-                        {"id": "processing_card_present_request_incremental_authorization_amount_manual_amount_manual_currency", "label": "Manual manual incremental authorization amount currency"},
+                        
+                        # Processing Configuration
+                        {"id": "processing[type]", "label": "Processing type"},
+                        {"id": "processing[card_present][request_extended_authorization]", "label": "Request extended authorization"},
+                        {"id": "processing[card_present][request_incremental_authorization_support]", "label": "Request incremental authorization support"},
+                        {"id": "processing[card_present][request_incremental_authorization][amount]", "label": "Incremental authorization amount"},
+                        {"id": "processing[card_present][request_incremental_authorization][currency]", "label": "Incremental authorization currency"},
                         
                         # Expand Fields
                         {"id": "expand", "label": "Fields to expand in the response"}
