@@ -207,7 +207,37 @@ def schema():
                         ]
                     }
                 })
+        elif field.get("id") == "type" and object_type == "balance_transaction":
+            fields.append({
+                "id":f"{field.get('id')}",
+                "label": f"{field.get('label')}",
+                "type": "string",
+                "ui_options": {
+                    "ui_widget": "SelectWidget"
+                },
+                "choices": {
+                    "values": [
+                        {"value" : choice } for choice in ["None","adjustment", "advance", "advance_funding", "anticipation_repayment", "application_fee", "application_fee_refund", "charge", "climate_order_purchase", "climate_order_refund", "connect_collection_transfer", "contribution", "issuing_authorization_hold", "issuing_authorization_release", "issuing_dispute", "issuing_transaction", "obligation_outbound", "obligation_reversal_inbound", "payment", "payment_failure_refund", "payment_network_reserve_hold", "payment_network_reserve_release", "payment_refund", "payment_reversal", "payment_unreconciled", "payout", "payout_cancel", "payout_failure", "payout_minimum_balance_hold", "payout_minimum_balance_release", "refund", "refund_failure", "reserve_transaction", "reserved_funds", "stripe_fee", "stripe_fx_fee", "stripe_balance_payment_debit", "stripe_balance_payment_debit_reversal", "tax_fee", "topup", "topup_reversal", "transfer", "transfer_cancel", "transfer_failure", "transfer_refund"]
+                    ]
+                }
 
+            })
+        elif field.get("id") in ["shippable", "active"] and object_type == "product":
+            fields.append({
+                "id":f"{field.get('id')}",
+                "label": f"{field.get('label')}",
+                "type": "string",
+                "ui_options": {
+                    "ui_widget": "SelectWidget"
+                },
+                "choices": {
+                    "values": [
+                        {"value" : choice } for choice in ["None", "True", "False"]
+                    ]
+                }
+
+            })
+        
         # Default field handling
         else:                    
             fields.append({
@@ -229,45 +259,82 @@ def execute():
     """
     Execute Stripe API calls based on form submission.
     
-    This endpoint:
-    1. Processes the form submission
-    2. Makes appropriate Stripe API calls
-    3. Returns the API response
+    This endpoint handles all Stripe API list operations for different object types.
+    It processes form data, makes appropriate API calls, and returns the response.
+    
+    Flow:
+    1. Parse and validate incoming request data
+    2. Extract and configure API credentials
+    3. Route to appropriate Stripe API call based on object_type
+    4. Handle special cases for each object type
+    5. Return standardized response
+    
+    Special Handling:
+    - balance_transaction: Handles type filter with None value removal
+    - event: Transforms type array into Stripe API format
+    - product: Handles IDs array and optional filters (status, shippable)
+    - invoice: Removes None values from optional filters
     
     Returns:
-        Response: Contains the Stripe API response or error message
+        Response: Contains either:
+            - Stripe API response data
+            - Error message for invalid object type
     """
-    # Parse and validate request
+    # Parse and validate incoming request data
     request = Request(flask_request)
     data = request.data or {}
 
     # Extract and remove non-API parameters
+    # These are used for routing but not sent to Stripe API
     object_type = data.get("object_type")
     api_key = data.get("api_key")
     del data["object_type"]
     del data["api_key"]
 
-    # Configure Stripe API
+    # Configure Stripe API with provided credentials
     stripe.api_key = api_key
 
-    # Route to appropriate Stripe API call based on object type
+    # ============================================================================
+    # OBJECT TYPE ROUTING
+    # ============================================================================
+    # Each object type has its own handling logic
+    
+    # Customer List
     if object_type == "customer":
         customers = stripe.Customer.list(**data)
         return Response(data=customers)
     
+    # Charge List
     if object_type == "charge":
         charges = stripe.Charge.list(**data)
         return Response(data=charges)
     
+    # Payment Intent List
     if object_type == "payment_intent":
         payment_intents = stripe.PaymentIntent.list(**data)
         return Response(data=payment_intents)
     
+    # ============================================================================
+    # BALANCE TRANSACTION HANDLING
+    # ============================================================================
+    # Special handling for balance transaction type filter
     if object_type == "balance_transaction":
+        # Remove type filter if it's set to "None"
+        # This prevents sending invalid filter to Stripe API
+        if bool(data.get("type")):
+            if data.get("type") == "None":
+                del data["type"]
+            # else: keep the type filter as is
+        
+        # Execute balance transaction list API call
         balance_transactions = stripe.BalanceTransaction.list(**data)
         return Response(data=balance_transactions)
 
+    # ============================================================================
+    # EVENT HANDLING
+    # ============================================================================
     # Special handling for event type parameter
+    # Transforms array of type objects into Stripe API format
     if object_type == "event":
         if bool(data.get("type")):
             types = data.get("type")
@@ -279,8 +346,14 @@ def execute():
         events = stripe.Event.list(**data)
         return Response(data=events)
     
-    # Special handling for product IDs parameter
+    # ============================================================================
+    # PRODUCT HANDLING
+    # ============================================================================
+    # Special handling for product parameters
+    # 1. Transforms IDs array into Stripe API format
+    # 2. Handles optional filters (status, shippable)
     if object_type == "product":
+        # Handle IDs array transformation
         if bool(data.get("ids")):
             ids = data.get("ids")
             final_ids = []
@@ -288,10 +361,22 @@ def execute():
                 final_ids.append(id.get("ids"))
             del data["ids"]
             data["ids"] = final_ids
+        
+        # Handle optional filters
+        # Remove filters if they're set to "None"
+        if data.get("status", "") == "None":
+            del data["status"]
+        if data.get("shippable", "") == "None":
+            del data["shippable"]
+
         products = stripe.Product.list(**data)
         return Response(data=products)
     
+    # ============================================================================
+    # INVOICE HANDLING
+    # ============================================================================
     # Special handling for invoice parameters
+    # Removes None values from optional filters to prevent invalid API calls
     if object_type == "invoice":
         # Remove None values from optional parameters
         if data.get("status") == "None":
@@ -301,6 +386,9 @@ def execute():
         invoices = stripe.Invoice.list(**data)
         return Response(data=invoices)
 
-    # Handle invalid object type
+    # ============================================================================
+    # ERROR HANDLING
+    # ============================================================================
+    # Return error message for invalid object type
     return Response(data="Please select an Object type")
    

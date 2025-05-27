@@ -134,15 +134,14 @@ OBJECT_TYPE = [
                     ],
                     "optional_fields": [
                         # Pagination
-                        {"id": "starting_after", "label": "Starting After -- Unix Timestamp"},
-                        {"id": "ending_before", "label": "Ending Before -- Unix Timestamp"},
+                        {"id": "starting_after", "label": "Starting After -- Customer ID"},
+                        {"id": "ending_before", "label": "Ending Before -- Customer ID"},
                         
                         # Date Filters
-                        {"id": "created", "label": "Filter by creation date"},
-                        {"id": "created[gt]", "label": "Created After"},
-                        {"id": "created[gte]", "label": "Created On or After"},
-                        {"id": "created[lt]", "label": "Created Before"},
-                        {"id": "created[lte]", "label": "Created On or Before"},
+                        {"id": "created[gt]", "label": "Created After -- Unix Timestamp"},
+                        {"id": "created[gte]", "label": "Created On or After -- Unix Timestamp"},
+                        {"id": "created[lt]", "label": "Created Before -- Unix Timestamp"},
+                        {"id": "created[lte]", "label": "Created On or Before -- Unix Timestamp"},
                         
                         # Other Filters
                         {"id": "email", "label": "Email Filter"},
@@ -271,15 +270,14 @@ OBJECT_TYPE = [
                     ],
                     "optional_fields": [
                         # Pagination
-                        {"id": "starting_after", "label": "Starting After"},
-                        {"id": "ending_before", "label": "Ending Before"},
+                        {"id": "starting_after", "label": "Starting After -- Charge ID"},
+                        {"id": "ending_before", "label": "Ending Before -- Charge ID"},
                         
                         # Date Filters
-                        {"id": "created", "label": "Filter by creation date"},
-                        {"id": "created[gt]", "label": "Created After"},
-                        {"id": "created[gte]", "label": "Created On or After"},
-                        {"id": "created[lt]", "label": "Created Before"},
-                        {"id": "created[lte]", "label": "Created On or Before"},
+                        {"id": "created[gt]", "label": "Created After -- Unix Timestamp"},
+                        {"id": "created[gte]", "label": "Created On or After -- Unix Timestamp"},
+                        {"id": "created[lt]", "label": "Created Before -- Unix Timestamp"},
+                        {"id": "created[lte]", "label": "Created On or Before -- Unix Timestamp"},
                         
                         # Other Filters
                        
@@ -552,23 +550,19 @@ OBJECT_TYPE = [
                         {"id": "limit", "label": "Limit"}
                     ],
                     "optional_fields": [
+
+                        {"id": "customer", "label": "Filter by customer ID"},
+                      
                         # Pagination
-                        {"id": "starting_after", "label": "Cursor for pagination (start after)"},
-                        {"id": "ending_before", "label": "Cursor for pagination (end before)"},
+                        {"id": "starting_after", "label": "Cursor for pagination (start after) -- Charge ID"},
+                        {"id": "ending_before", "label": "Cursor for pagination (end before) -- Charge ID"},
                         
                         # Date Filters
-                        {"id": "created", "label": "Filter by creation date"},
-                        {"id": "created[gt]", "label": "Created after timestamp"},
-                        {"id": "created[gte]", "label": "Created on or after timestamp"},
-                        {"id": "created[lt]", "label": "Created before timestamp"},
-                        {"id": "created[lte]", "label": "Created on or before timestamp"},
-                        
-                        # Other Filters
-                        {"id": "customer", "label": "Filter by customer ID"},
-                        {"id": "payment_method", "label": "Filter by payment method ID"},
-                        {"id": "transfer_data_destination", "label": "Filter by transfer destination"},
-                        {"id": "transfer_group", "label": "Filter by transfer group"},
-                        {"id": "expand", "label": "Fields to expand in the response"}
+                        {"id": "created[gt]", "label": "Created after -- Unix Timestamp"},
+                        {"id": "created[gte]", "label": "Created on or after -- Unix Timestamp"},
+                        {"id": "created[lt]", "label": "Created before -- Unix Timestamp"},
+                        {"id": "created[lte]", "label": "Created on or before -- Unix Timestamp"}
+                                                
                     ]
                 }
             },
@@ -692,25 +686,27 @@ OBJECT_TYPE = [
                         {"id": "limit", "label": "Limit"}
                     ],
                     "optional_fields": [
-                        # Pagination
-                        {"id": "starting_after", "label": "Cursor for pagination (start after)"},
-                        {"id": "ending_before", "label": "Cursor for pagination (end before)"},
+                        # Payout Filter
+                        {"id": "payout", "label": "Filter by payout ID (for automatic Stripe payouts only)"},
                         
-                        # Filters
-                        {"id": "payout", "label": "Filter by payout ID"},
-                        {"id": "type", "label": "Filter by transaction type (e.g., charge, refund, transfer)"},
-                        {"id": "currency", "label": "Filter by currency code"},
+                        # Transaction Type Filter
+                        {"id": "type", "label": "Filter by transaction type (e.g., charge, refund, transfer, etc.)"},
+                        
+                        # Currency Filter
+                        {"id": "currency", "label": "Filter by currency code (three-letter ISO code, lowercase)"},
+                        
+                        # Source Filter
                         {"id": "source", "label": "Filter by source object ID"},
                         
-                        # Date Filters
-                        {"id": "created", "label": "Filter by creation date"},
-                        {"id": "created[gt]", "label": "Created after timestamp"},
-                        {"id": "created[gte]", "label": "Created on or after timestamp"},
-                        {"id": "created[lt]", "label": "Created before timestamp"},
-                        {"id": "created[lte]", "label": "Created on or before timestamp"},
+                        # Pagination
+                        {"id": "starting_after", "label": "Cursor for pagination (start after) -- Transaction ID"},
+                        {"id": "ending_before", "label": "Cursor for pagination (end before) -- Transaction ID"},
                         
-                        # Additional Options
-                        {"id": "expand", "label": "Fields to expand in the response"}
+                        # Date Filters
+                        {"id": "created[gt]", "label": "Created after -- Unix Timestamp"},
+                        {"id": "created[gte]", "label": "Created on or after -- Unix Timestamp"},
+                        {"id": "created[lt]", "label": "Created before -- Unix Timestamp"},
+                        {"id": "created[lte]", "label": "Created on or before -- Unix Timestamp"}
                     ]
                 }
             },
@@ -740,6 +736,9 @@ OBJECT_TYPE = [
                         # Types Filter
                         {"id": "type", "label": "Array of event types to filter by (up to 20)"},
                         
+                         # Pagination
+                        {"id": "starting_after", "label": "Cursor for pagination (start after) -- Product ID"},
+                        {"id": "ending_before", "label": "Cursor for pagination (end before) -- Product ID"},
                         
                         # Date Filters
                         {"id": "created[gt]", "label": "Created after timestamp"},
@@ -747,12 +746,9 @@ OBJECT_TYPE = [
                         {"id": "created[lt]", "label": "Created before timestamp"},
                         {"id": "created[lte]", "label": "Created on or before timestamp"},
                         
-                        # Pagination
-                        {"id": "starting_after", "label": "Cursor for pagination (start after)"},
-                        {"id": "ending_before", "label": "Cursor for pagination (end before)"},
-                        
+                       
                         # Delivery Status
-                        {"id": "delivery_success", "label": "Filter by delivery success status"}
+                        {"id": "delivery_success", "label": "Filter by delivery success status -- Boolean"}
                     ]
                 }
             },
@@ -779,19 +775,20 @@ OBJECT_TYPE = [
                     "optional_fields": [
                         # Active Status Filter
                         {"id": "active", "label": "Filter by active status (true/false)"},
-                        
+                        # Pagination
+                        {"id": "starting_after", "label": "Cursor for pagination (start after) -- Invoice ID"},
+                        {"id": "ending_before", "label": "Cursor for pagination (end before) -- Invoice ID"},
+                    
                         # Created Date Filter
-                        {"id": "created[gt]", "label": "Created after timestamp"},
-                        {"id": "created[gte]", "label": "Created on or after timestamp"},
-                        {"id": "created[lt]", "label": "Created before timestamp"},
-                        {"id": "created[lte]", "label": "Created on or before timestamp"},
+                        {"id": "created[gt]", "label": "Created after -- Unix Timestamp"},
+                        {"id": "created[gte]", "label": "Created on or after -- Unix Timestamp"},
+                        {"id": "created[lt]", "label": "Created before -- Unix Timestamp"},
+                        {"id": "created[lte]", "label": "Created on or before -- Unix Timestamp"},
                         
                         # ID Filter
                         {"id": "ids", "label": "Filter by product IDs (array of strings)"},
                         
-                        # Pagination
-                        {"id": "starting_after", "label": "Cursor for pagination (start after)"},
-                        {"id": "ending_before", "label": "Cursor for pagination (end before)"},
+                        
                         
                         # Shippable Filter
                         {"id": "shippable", "label": "Filter by shippable status (true/false)"},
@@ -823,16 +820,16 @@ OBJECT_TYPE = [
                         
                         # Collection Method Filter
                         {"id": "collection_method", "label": "Filter by collection method (charge_automatically, send_invoice)"},
-                        
-                        # Created Date Filter
-                        {"id": "created[gt]", "label": "Created after timestamp"},
-                        {"id": "created[gte]", "label": "Created on or after timestamp"},
-                        {"id": "created[lt]", "label": "Created before timestamp"},
-                        {"id": "created[lte]", "label": "Created on or before timestamp"},
-                        
                         # Pagination
-                        {"id": "starting_after", "label": "Cursor for pagination (start after)"},
-                        {"id": "ending_before", "label": "Cursor for pagination (end before)"}
+                        {"id": "starting_after", "label": "Cursor for pagination (start after) -- Invoice ID"},
+                        {"id": "ending_before", "label": "Cursor for pagination (end before) -- Invoice ID"},
+                        # Created Date Filter
+                        {"id": "created[gt]", "label": "Created after -- Unix Timestamp"},
+                        {"id": "created[gte]", "label": "Created on or after -- Unix Timestamp"},
+                        {"id": "created[lt]", "label": "Created before -- Unix Timestamp"},
+                        {"id": "created[lte]", "label": "Created on or before -- Unix Timestamp"},
+                        
+                        
                     ]
                 }
             }
