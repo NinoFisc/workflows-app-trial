@@ -134,8 +134,8 @@ OBJECT_TYPE = [
                     ],
                     "optional_fields": [
                         # Pagination
-                        {"id": "starting_after", "label": "Starting After"},
-                        {"id": "ending_before", "label": "Ending Before"},
+                        {"id": "starting_after", "label": "Starting After -- Unix Timestamp"},
+                        {"id": "ending_before", "label": "Ending Before -- Unix Timestamp"},
                         
                         # Date Filters
                         {"id": "created", "label": "Filter by creation date"},
@@ -282,7 +282,7 @@ OBJECT_TYPE = [
                         {"id": "created[lte]", "label": "Created On or Before"},
                         
                         # Other Filters
-                        {"id": "email", "label": "Email Filter"},
+                       
                         {"id": "test_clock", "label": "Test Clock"}
                     ]
                 }
@@ -723,6 +723,116 @@ OBJECT_TYPE = [
                     "optional_fields": [
                         {"id": "page", "label": "Page number for pagination"},
                         {"id": "expand", "label": "Fields to expand in the response"}
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        "object_type": "event",
+        "action": [
+            {
+                "list": {
+                    "required_fields": [
+                        {"id": "limit", "label": "Limit"}
+                    ],
+                    "optional_fields": [
+                        # Types Filter
+                        {"id": "type", "label": "Array of event types to filter by (up to 20)"},
+                        
+                        
+                        # Date Filters
+                        {"id": "created[gt]", "label": "Created after timestamp"},
+                        {"id": "created[gte]", "label": "Created on or after timestamp"},
+                        {"id": "created[lt]", "label": "Created before timestamp"},
+                        {"id": "created[lte]", "label": "Created on or before timestamp"},
+                        
+                        # Pagination
+                        {"id": "starting_after", "label": "Cursor for pagination (start after)"},
+                        {"id": "ending_before", "label": "Cursor for pagination (end before)"},
+                        
+                        # Delivery Status
+                        {"id": "delivery_success", "label": "Filter by delivery success status"}
+                    ]
+                }
+            },
+            {
+                "get": {
+                    "required_fields": [
+                        {"id": "event", "label": "Event ID"}
+                    ],
+                    "optional_fields": [
+                        {"id": "expand", "label": "Fields to expand in the response"}
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        "object_type": "product",
+        "action": [
+            {
+                "list": {
+                    "required_fields": [
+                        {"id": "limit", "label": "Limit"}
+                    ],
+                    "optional_fields": [
+                        # Active Status Filter
+                        {"id": "active", "label": "Filter by active status (true/false)"},
+                        
+                        # Created Date Filter
+                        {"id": "created[gt]", "label": "Created after timestamp"},
+                        {"id": "created[gte]", "label": "Created on or after timestamp"},
+                        {"id": "created[lt]", "label": "Created before timestamp"},
+                        {"id": "created[lte]", "label": "Created on or before timestamp"},
+                        
+                        # ID Filter
+                        {"id": "ids", "label": "Filter by product IDs (array of strings)"},
+                        
+                        # Pagination
+                        {"id": "starting_after", "label": "Cursor for pagination (start after)"},
+                        {"id": "ending_before", "label": "Cursor for pagination (end before)"},
+                        
+                        # Shippable Filter
+                        {"id": "shippable", "label": "Filter by shippable status (true/false)"},
+                        
+                        # URL Filter
+                        {"id": "url", "label": "Filter by URL"}
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        "object_type": "invoice",
+        "action": [
+            {
+                "list": {
+                    "required_fields": [
+                        {"id": "limit", "label": "Limit"}
+                    ],
+                    "optional_fields": [
+                        # Customer Filter
+                        {"id": "customer", "label": "Filter by customer ID"},
+                        
+                        # Status Filter
+                        {"id": "status", "label": "Filter by invoice status (draft, open, paid, uncollectible, void)"},
+                        
+                        # Subscription Filter
+                        {"id": "subscription", "label": "Filter by subscription ID"},
+                        
+                        # Collection Method Filter
+                        {"id": "collection_method", "label": "Filter by collection method (charge_automatically, send_invoice)"},
+                        
+                        # Created Date Filter
+                        {"id": "created[gt]", "label": "Created after timestamp"},
+                        {"id": "created[gte]", "label": "Created on or after timestamp"},
+                        {"id": "created[lt]", "label": "Created before timestamp"},
+                        {"id": "created[lte]", "label": "Created on or before timestamp"},
+                        
+                        # Pagination
+                        {"id": "starting_after", "label": "Cursor for pagination (start after)"},
+                        {"id": "ending_before", "label": "Cursor for pagination (end before)"}
                     ]
                 }
             }

@@ -1,27 +1,32 @@
-# Import necessary libraries
-# Flask for handling HTTP requests
-# Response and Request from workflows_cdk for standardized request/response handling
-# Router from main for route management
-# All constants from dict.py (OBJECT_TYPE, GET_OBJECT_TYPE, etc.)
-# Stripe SDK for interacting with Stripe API
+# ============================================================================
+# IMPORTS
+# ============================================================================
+# Core Flask and request handling
 from flask import request as flask_request
 from workflows_cdk import Response, Request
 from main import router
-from dict import *
+
+# Application specific imports
+from dict import *  # TODO: Consider importing specific constants instead of *
 import stripe
 
-# Module identifier for this route handler
+# ============================================================================
+# CONSTANTS & CONFIGURATION
+# ============================================================================
+# Module identifier for route handling and logging
 module = "list"
 
-# Base schema definition for the initial form
-# This schema is used when no object type is selected
-# It contains two fields:
-# 1. api_key - Required string field for Stripe API authentication
-# 2. object_type - Required select field that dynamically loads available object types
+# ============================================================================
+# SCHEMA DEFINITIONS
+# ============================================================================
+# Base schema for initial form state (no object type selected)
+# Contains two essential fields:
+# 1. api_key: For Stripe API authentication
+# 2. object_type: Dynamic selector for available Stripe objects
 base_schema = {
     "metadata": {},
     "fields": [
-        # API Key field definition
+        # API Key field - Required for all Stripe API calls
         {
             "id": "api_key",
             "label": "api_key",
@@ -30,7 +35,7 @@ base_schema = {
                 "required": True
             }
         },
-        # Object Type selector field definition
+        # Object Type selector - Dynamic field that triggers schema updates
         {
             "type": "string",
             "label": "Select object type",
@@ -53,48 +58,56 @@ base_schema = {
     ]
 }
 
-# Route handler for schema generation
-# This endpoint is called when the form needs to be dynamically updated
-# It returns different schemas based on the selected object type
+# ============================================================================
+# ROUTE HANDLERS
+# ============================================================================
+
 @router.route("/schema", methods=["POST"])
 def schema():
-    # Parse the incoming request
+    """
+    Dynamic schema generation endpoint.
+    
+    This endpoint:
+    1. Receives the current form state
+    2. Determines the appropriate schema based on selected object type
+    3. Returns a schema with relevant fields for the selected object type
+    
+    Returns:
+        Response: Contains the generated schema for the form
+    """
+    # Parse and validate incoming request
     request = Request(flask_request)
     data = request.data or {}
     form_data = data.get("form_data", {})
     object_type = form_data.get("object_type")
 
-    # If no object type is selected, return the base schema
+    # Return base schema if no object type selected
     if not object_type:
         return Response(data={"schema": base_schema})
 
-    # Debug logging
-    print("Data:", data)
-    print(object_type, "--------------------------")
-
-    # Find the index of the selected object type in OBJECT_TYPE list
+    # Find the selected object type configuration
     index = 0
     for obj in OBJECT_TYPE:
         if obj.get("object_type") == object_type:
             index = OBJECT_TYPE.index(obj)
 
-    # Get the actions available for the selected object type
+    # Extract available actions for the selected object type
     object_type_actions = OBJECT_TYPE[index].get("action")
 
-    # Initialize lists for required and optional fields
+    # Initialize field lists
     required_fields = []
     optional_fields = []
 
-    # Extract required and optional fields for the 'get' action
+    # Extract required and optional fields for the current module (list)
     for action in object_type_actions:
         for action_key, action_value in action.items():
             if action_key == module:
                 required_fields = action_value.get("required_fields")
                 optional_fields = action_value.get("optional_fields")
 
-    # Start building the dynamic schema with base fields
+    # Build base fields (always present)
     fields = [
-        # API Key field (always required)
+        # API Key field (required for all requests)
         {
             "id": "api_key",
             "label": "api_key",
@@ -103,7 +116,7 @@ def schema():
                 "required": True
             }
         },
-        # Object Type selector (always required)
+        # Object Type selector (required for all requests)
         {
             "type": "string",
             "label": "Select object type",
@@ -125,7 +138,7 @@ def schema():
         }
     ]
 
-    # Add required fields to the schema
+    # Add required fields to schema
     for field in required_fields:
         fields.append({
             "id": f"{field.get('id')}",
@@ -136,15 +149,74 @@ def schema():
             }
         })
 
-    # Add optional fields to the schema
+    # Process optional fields with special handling for specific object types
     for field in optional_fields:
-        fields.append({
-            "id": f"{field.get('id')}",
-            "label": f"{field.get('label')}",
-            "type": "string"
-        })
+        # Special handling for event type field
+        if field.get("id") == "type" and object_type == "event":
+            fields.append({
+                "id": f"{field.get('id')}",
+                "label": f"{field.get('label')}",
+                "type": "array",
+                "items":{
+                    "type":"object",
+                    "fields":[
+                        {
+                            "id":"types",
+                            "type":"string",
+                            "label":"Type"
+                        }
+                    ]
+                }
+            })
+        
+        # Special handling for product IDs field
+        elif field.get("id") == "ids" and object_type == "product":
+            fields.append({
+                "id": f"{field.get('id')}",
+                "label": f"{field.get('label')}",
+                "type": "array",
+                "items":{
+                    "type":"object",
+                    "fields":[
+                        {
+                            "id":"ids",
+                            "type":"string",
+                            "label":"ID"
+                        }
+                    ]
+                }
+            })
 
-    # Construct the final schema
+        # Special handling for invoice fields (collection_method and status)
+        elif field.get("id") in ["collection_method", "status"] and object_type == "invoice":
+            invoice_fields_choice = {
+                "collection_method": ["charge_automatically", "send_invoice", "None"],
+                "status": ["draft", "open", "paid", "uncollectible", "void", "None"]
+            }
+            if field.get("id") in invoice_fields_choice:
+                fields.append({
+                    "id": f"{field.get('id')}",
+                    "label": f"{field.get('label')}",
+                    "type": "string",
+                    "ui_options": {
+                        "ui_widget": "SelectWidget"
+                    },
+                    "choices": {
+                        "values": [
+                            {"value": choice} for choice in invoice_fields_choice[field.get("id")]
+                        ]
+                    }
+                })
+
+        # Default field handling
+        else:                    
+            fields.append({
+                "id": f"{field.get('id')}",
+                "label": f"{field.get('label')}",
+                "type": "string"
+            })
+
+    # Construct and return final schema
     new_schema = {
         "metadata": {},
         "fields": fields
@@ -152,27 +224,33 @@ def schema():
 
     return Response(data={"schema": new_schema})
 
-# Route handler for executing Stripe API calls
-# This endpoint processes the form submission and makes the actual API calls
 @router.route("/execute", methods=["POST", "GET"])
 def execute():
-    # Parse the incoming request
+    """
+    Execute Stripe API calls based on form submission.
+    
+    This endpoint:
+    1. Processes the form submission
+    2. Makes appropriate Stripe API calls
+    3. Returns the API response
+    
+    Returns:
+        Response: Contains the Stripe API response or error message
+    """
+    # Parse and validate request
     request = Request(flask_request)
     data = request.data or {}
 
-    # Extract object type and API key from the request
+    # Extract and remove non-API parameters
     object_type = data.get("object_type")
     api_key = data.get("api_key")
-
-    # Remove object_type and api_key from data as they're not part of the API call
     del data["object_type"]
     del data["api_key"]
 
-    # Set the Stripe API key
+    # Configure Stripe API
     stripe.api_key = api_key
 
-    # Handle different object types
-    # Each object type has its own specific retrieval logic
+    # Route to appropriate Stripe API call based on object type
     if object_type == "customer":
         customers = stripe.Customer.list(**data)
         return Response(data=customers)
@@ -188,10 +266,41 @@ def execute():
     if object_type == "balance_transaction":
         balance_transactions = stripe.BalanceTransaction.list(**data)
         return Response(data=balance_transactions)
+
+    # Special handling for event type parameter
+    if object_type == "event":
+        if bool(data.get("type")):
+            types = data.get("type")
+            final_types = []
+            for typee in types:
+                final_types.append(typee.get("types"))
+            del data["type"]
+            data["types"] = final_types
+        events = stripe.Event.list(**data)
+        return Response(data=events)
     
-        
-        
-    else:
-        # Handle invalid object type
-        return Response(data="Please select an Object type")
+    # Special handling for product IDs parameter
+    if object_type == "product":
+        if bool(data.get("ids")):
+            ids = data.get("ids")
+            final_ids = []
+            for id in ids:
+                final_ids.append(id.get("ids"))
+            del data["ids"]
+            data["ids"] = final_ids
+        products = stripe.Product.list(**data)
+        return Response(data=products)
+    
+    # Special handling for invoice parameters
+    if object_type == "invoice":
+        # Remove None values from optional parameters
+        if data.get("status") == "None":
+            del data["status"]
+        if data.get("collection_method") == "None":
+            del data["collection_method"]
+        invoices = stripe.Invoice.list(**data)
+        return Response(data=invoices)
+
+    # Handle invalid object type
+    return Response(data="Please select an Object type")
    

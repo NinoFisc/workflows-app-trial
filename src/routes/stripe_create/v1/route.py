@@ -142,11 +142,26 @@ def schema():
     # Add optional fields to the schema
     # These fields can be left empty
     for field in optional_fields:
-        fields.append({
-            "id": f"{field.get('id')}",
-            "label": f"{field.get('label')}",
-            "type": "string"
-        })
+        if field.get("id") == "metadata":
+            fields.append(
+                {
+                    "id": "metadata",
+                    "label": "Metadata",
+                    "type": "string",
+                    "ui_options": {
+                        "ui_widget": "CodeblockWidget",
+                        "ui_options": {
+                        "language": "json"
+                        }
+                }
+                }
+            )
+        else:
+            fields.append({
+                "id": f"{field.get('id')}",
+                "label": f"{field.get('label')}",
+                "type": "string"
+            })
 
     # Construct the final schema
     new_schema = {
