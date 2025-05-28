@@ -58,7 +58,7 @@ OBJECT_TYPE = [
                         
                         # Additional Information
                         {"id": "preferred_locales", "label": "Preferred Languages"},
-                        {"id": "test_clock", "label": "Test Clock"}
+                        {"id": "test_clock", "label": "Test Clock", "description": "A special clock for testing time-dependent features. First, you need to create a test clock using the 'Create Test Clock' action. Then, you can use its ID here to filter results for that specific test time. This lets you simulate different dates and times in your test environment. For example, if you want to test what happens when a subscription renews in the future, create a test clock, advance it to that date, and use its ID here. This only works in test mode, not in live mode. Example: clock_123456789"}
                     ]
                 }
             },
@@ -130,22 +130,24 @@ OBJECT_TYPE = [
             {
                 "list": {
                     "required_fields": [
-                        {"id": "limit", "label": "Limit"}
+                        {"id": "limit", "label": "Limit", "description": "How many customers to return (e.g., 10 for 10 customers)"}
                     ],
                     "optional_fields": [
-                        # Pagination
-                        {"id": "starting_after", "label": "Starting After -- Customer ID"},
-                        {"id": "ending_before", "label": "Ending Before -- Customer ID"},
+                        # Email Filter
+                        {"id": "email", "label": "Email", "description": "Find customers by email (e.g., customer@example.com)"},
                         
                         # Date Filters
-                        {"id": "created[gt]", "label": "Created After -- Unix Timestamp"},
-                        {"id": "created[gte]", "label": "Created On or After -- Unix Timestamp"},
-                        {"id": "created[lt]", "label": "Created Before -- Unix Timestamp"},
-                        {"id": "created[lte]", "label": "Created On or Before -- Unix Timestamp"},
+                        {"id": "created[gt]", "label": "Created After", "description": "Find customers created after this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[gte]", "label": "Created On or After", "description": "Find customers created on or after this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[lt]", "label": "Created Before", "description": "Find customers created before this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find customers created on or before this date (e.g., 1609459200 for Jan 1, 2021)"},
                         
-                        # Other Filters
-                        {"id": "email", "label": "Email Filter"},
-                        {"id": "test_clock", "label": "Test Clock"}
+                        # Pagination
+                        {"id": "starting_after", "label": "Start After", "description": "Get customers after this ID (e.g., cus_123456789)"},
+                        {"id": "ending_before", "label": "End Before", "description": "Get customers before this ID (e.g., cus_123456789)"},
+                        
+                        # Test Clock
+                        {"id": "test_clock", "label": "Test Clock", "description": "A special clock for testing time-dependent features. First, you need to create a test clock using the 'Create Test Clock' action. Then, you can use its ID here to filter results for that specific test time. This lets you simulate different dates and times in your test environment. For example, if you want to test what happens when a subscription renews in the future, create a test clock, advance it to that date, and use its ID here. This only works in test mode, not in live mode. Example: clock_123456789"}
                     ]
                 }
             },
@@ -266,22 +268,30 @@ OBJECT_TYPE = [
             {
                 "list": {
                     "required_fields": [
-                        {"id": "limit", "label": "Limit"}
+                        {"id": "limit", "label": "Limit", "description": "How many charges to return (e.g., 10 for 10 charges)"}
                     ],
                     "optional_fields": [
-                        # Pagination
-                        {"id": "starting_after", "label": "Starting After -- Charge ID"},
-                        {"id": "ending_before", "label": "Ending Before -- Charge ID"},
+                        # Customer Filter
+                        {"id": "customer", "label": "Customer ID", "description": "Find charges for a specific customer (e.g., cus_123456789)"},
                         
                         # Date Filters
-                        {"id": "created[gt]", "label": "Created After -- Unix Timestamp"},
-                        {"id": "created[gte]", "label": "Created On or After -- Unix Timestamp"},
-                        {"id": "created[lt]", "label": "Created Before -- Unix Timestamp"},
-                        {"id": "created[lte]", "label": "Created On or Before -- Unix Timestamp"},
+                        {"id": "created[gt]", "label": "Created After", "description": "Find charges created after this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[gte]", "label": "Created On or After", "description": "Find charges created on or after this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[lt]", "label": "Created Before", "description": "Find charges created before this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find charges created on or before this date (e.g., 1609459200 for Jan 1, 2021)"},
                         
-                        # Other Filters
-                       
-                        {"id": "test_clock", "label": "Test Clock"}
+                        # Payment Intent Filter
+                        {"id": "payment_intent", "label": "Payment Intent ID", "description": "Find charges for a specific payment intent (e.g., pi_123456789)"},
+                        
+                        # Pagination
+                        {"id": "starting_after", "label": "Start After", "description": "Get charges after this ID (e.g., ch_123456789)"},
+                        {"id": "ending_before", "label": "End Before", "description": "Get charges before this ID (e.g., ch_123456789)"},
+                        
+                        # Transfer Group Filter
+                        {"id": "transfer_group", "label": "Transfer Group", "description": "Find charges in a transfer group (e.g., tg_123456789)"},
+                        
+                        # Test Clock
+                        {"id": "test_clock", "label": "Test Clock", "description": "A special clock for testing time-dependent features. First, you need to create a test clock using the 'Create Test Clock' action. Then, you can use its ID here to filter results for that specific test time. This lets you simulate different dates and times in your test environment. For example, if you want to test what happens when a subscription renews in the future, create a test clock, advance it to that date, and use its ID here. This only works in test mode, not in live mode. Example: clock_123456789"}
                     ]
                 }
             },
@@ -547,22 +557,21 @@ OBJECT_TYPE = [
             {
                 "list": {
                     "required_fields": [
-                        {"id": "limit", "label": "Limit"}
+                        {"id": "limit", "label": "Limit", "description": "How many payment intents to return (e.g., 10 for 10 payment intents)"}
                     ],
                     "optional_fields": [
-
-                        {"id": "customer", "label": "Filter by customer ID"},
-                      
-                        # Pagination
-                        {"id": "starting_after", "label": "Cursor for pagination (start after) -- Charge ID"},
-                        {"id": "ending_before", "label": "Cursor for pagination (end before) -- Charge ID"},
+                        # Customer Filter
+                        {"id": "customer", "label": "Customer ID", "description": "Find payment intents for a specific customer (e.g., cus_123456789)"},
                         
                         # Date Filters
-                        {"id": "created[gt]", "label": "Created after -- Unix Timestamp"},
-                        {"id": "created[gte]", "label": "Created on or after -- Unix Timestamp"},
-                        {"id": "created[lt]", "label": "Created before -- Unix Timestamp"},
-                        {"id": "created[lte]", "label": "Created on or before -- Unix Timestamp"}
-                                                
+                        {"id": "created[gt]", "label": "Created After", "description": "Find payment intents created after this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[gte]", "label": "Created On or After", "description": "Find payment intents created on or after this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[lt]", "label": "Created Before", "description": "Find payment intents created before this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find payment intents created on or before this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        
+                        # Pagination
+                        {"id": "starting_after", "label": "Start After", "description": "Get payment intents after this ID (e.g., pi_123456789)"},
+                        {"id": "ending_before", "label": "End Before", "description": "Get payment intents before this ID (e.g., pi_123456789)"}
                     ]
                 }
             },
@@ -683,30 +692,30 @@ OBJECT_TYPE = [
             {
                 "list": {
                     "required_fields": [
-                        {"id": "limit", "label": "Limit"}
+                        {"id": "limit", "label": "Limit", "description": "How many transactions to return (e.g., 10 for 10 transactions)"}
                     ],
                     "optional_fields": [
                         # Payout Filter
-                        {"id": "payout", "label": "Filter by payout ID (for automatic Stripe payouts only)"},
+                        {"id": "payout", "label": "Payout ID", "description": "Find transactions for a specific payout (e.g., po_123456789)"},
                         
                         # Transaction Type Filter
-                        {"id": "type", "label": "Filter by transaction type (e.g., charge, refund, transfer, etc.)"},
-                        
-                        # Currency Filter
-                        {"id": "currency", "label": "Filter by currency code (three-letter ISO code, lowercase)"},
-                        
-                        # Source Filter
-                        {"id": "source", "label": "Filter by source object ID"},
-                        
-                        # Pagination
-                        {"id": "starting_after", "label": "Cursor for pagination (start after) -- Transaction ID"},
-                        {"id": "ending_before", "label": "Cursor for pagination (end before) -- Transaction ID"},
+                        {"id": "type", "label": "Transaction Type", "description": "Find transactions of a specific type (e.g., charge, refund, transfer)"},
                         
                         # Date Filters
-                        {"id": "created[gt]", "label": "Created after -- Unix Timestamp"},
-                        {"id": "created[gte]", "label": "Created on or after -- Unix Timestamp"},
-                        {"id": "created[lt]", "label": "Created before -- Unix Timestamp"},
-                        {"id": "created[lte]", "label": "Created on or before -- Unix Timestamp"}
+                        {"id": "created[gt]", "label": "Created After", "description": "Find transactions created after this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[gte]", "label": "Created On or After", "description": "Find transactions created on or after this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[lt]", "label": "Created Before", "description": "Find transactions created before this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find transactions created on or before this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        
+                        # Currency Filter
+                        {"id": "currency", "label": "Currency", "description": "Find transactions in a specific currency in Three-letter ISO currency code, in lowercase (e.g., usd, eur)"},
+                        
+                        # Source Filter
+                        {"id": "source", "label": "Source ID", "description": "Find transactions for a specific source (e.g., ch_123456789)"},
+                        
+                        # Pagination
+                        {"id": "starting_after", "label": "Start After", "description": "Get transactions after this ID (e.g., txn_123456789)"},
+                        {"id": "ending_before", "label": "End Before", "description": "Get transactions before this ID (e.g., txn_123456789)"}
                     ]
                 }
             },
@@ -730,25 +739,24 @@ OBJECT_TYPE = [
             {
                 "list": {
                     "required_fields": [
-                        {"id": "limit", "label": "Limit"}
+                        {"id": "limit", "label": "Limit", "description": "How many events to return (e.g., 10 for 10 events)"}
                     ],
                     "optional_fields": [
                         # Types Filter
-                        {"id": "type", "label": "Array of event types to filter by (up to 20)"},
-                        
-                         # Pagination
-                        {"id": "starting_after", "label": "Cursor for pagination (start after) -- Product ID"},
-                        {"id": "ending_before", "label": "Cursor for pagination (end before) -- Product ID"},
+                        {"id": "type", "label": "Event Type", "description": "Find specific types of events (e.g., charge.succeeded, payment_intent.created)"},
                         
                         # Date Filters
-                        {"id": "created[gt]", "label": "Created after timestamp"},
-                        {"id": "created[gte]", "label": "Created on or after timestamp"},
-                        {"id": "created[lt]", "label": "Created before timestamp"},
-                        {"id": "created[lte]", "label": "Created on or before timestamp"},
+                        {"id": "created[gt]", "label": "Created After", "description": "Find events created after this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[gte]", "label": "Created On or After", "description": "Find events created on or after this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[lt]", "label": "Created Before", "description": "Find events created before this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find events created on or before this date (e.g., 1609459200 for Jan 1, 2021)"},
                         
-                       
-                        # Delivery Status
-                        {"id": "delivery_success", "label": "Filter by delivery success status -- Boolean"}
+                        # Delivery Status Filter
+                        {"id": "delivery_success", "label": "Delivery Success", "description": "Find events by delivery status (true for successful, false for failed)"},
+                        
+                        # Pagination
+                        {"id": "starting_after", "label": "Start After", "description": "Get events after this ID (e.g., evt_123456789)"},
+                        {"id": "ending_before", "label": "End Before", "description": "Get events before this ID (e.g., evt_123456789)"}
                     ]
                 }
             },
@@ -770,31 +778,30 @@ OBJECT_TYPE = [
             {
                 "list": {
                     "required_fields": [
-                        {"id": "limit", "label": "Limit"}
+                        {"id": "limit", "label": "Limit", "description": "How many products to return (e.g., 10 for 10 products)"}
                     ],
                     "optional_fields": [
                         # Active Status Filter
-                        {"id": "active", "label": "Filter by active status (true/false)"},
-                        # Pagination
-                        {"id": "starting_after", "label": "Cursor for pagination (start after) -- Invoice ID"},
-                        {"id": "ending_before", "label": "Cursor for pagination (end before) -- Invoice ID"},
-                    
-                        # Created Date Filter
-                        {"id": "created[gt]", "label": "Created after -- Unix Timestamp"},
-                        {"id": "created[gte]", "label": "Created on or after -- Unix Timestamp"},
-                        {"id": "created[lt]", "label": "Created before -- Unix Timestamp"},
-                        {"id": "created[lte]", "label": "Created on or before -- Unix Timestamp"},
+                        {"id": "active", "label": "Active Status", "description": "Find active or inactive products (true for active, false for inactive)"},
                         
-                        # ID Filter
-                        {"id": "ids", "label": "Filter by product IDs (array of strings)"},
+                        # Date Filters
+                        {"id": "created[gt]", "label": "Created After", "description": "Find products created after this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[gte]", "label": "Created On or After", "description": "Find products created on or after this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[lt]", "label": "Created Before", "description": "Find products created before this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find products created on or before this date (e.g., 1609459200 for Jan 1, 2021)"},
                         
-                        
+                        # IDs Filter
+                        {"id": "ids", "label": "Product IDs", "description": "Find specific products by their IDs (e.g., prod_123456789, prod_987654321)"},
                         
                         # Shippable Filter
-                        {"id": "shippable", "label": "Filter by shippable status (true/false)"},
+                        {"id": "shippable", "label": "Shippable Status", "description": "Find shippable or non-shippable products (true for shippable, false for non-shippable)"},
                         
                         # URL Filter
-                        {"id": "url", "label": "Filter by URL"}
+                        {"id": "url", "label": "Product URL", "description": "Find products with a specific URL (e.g., https://example.com/product)"},
+                        
+                        # Pagination
+                        {"id": "starting_after", "label": "Start After", "description": "Get products after this ID (e.g., prod_123456789)"},
+                        {"id": "ending_before", "label": "End Before", "description": "Get products before this ID (e.g., prod_123456789)"}
                     ]
                 }
             }
@@ -806,30 +813,30 @@ OBJECT_TYPE = [
             {
                 "list": {
                     "required_fields": [
-                        {"id": "limit", "label": "Limit"}
+                        {"id": "limit", "label": "Limit", "description": "How many invoices to return (e.g., 10 for 10 invoices)"}
                     ],
                     "optional_fields": [
                         # Customer Filter
-                        {"id": "customer", "label": "Filter by customer ID"},
+                        {"id": "customer", "label": "Customer ID", "description": "Find invoices for a specific customer (e.g., cus_123456789)"},
                         
                         # Status Filter
-                        {"id": "status", "label": "Filter by invoice status (draft, open, paid, uncollectible, void)"},
+                        {"id": "status", "label": "Invoice Status", "description": "Find invoices by status (draft, open, paid, uncollectible, void)"},
                         
                         # Subscription Filter
-                        {"id": "subscription", "label": "Filter by subscription ID"},
+                        {"id": "subscription", "label": "Subscription ID", "description": "Find invoices for a specific subscription (e.g., sub_123456789)"},
                         
                         # Collection Method Filter
-                        {"id": "collection_method", "label": "Filter by collection method (charge_automatically, send_invoice)"},
+                        {"id": "collection_method", "label": "Collection Method", "description": "Find invoices by collection method (charge_automatically, send_invoice)"},
+                        
+                        # Date Filters
+                        {"id": "created[gt]", "label": "Created After", "description": "Find invoices created after this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[gte]", "label": "Created On or After", "description": "Find invoices created on or after this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[lt]", "label": "Created Before", "description": "Find invoices created before this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find invoices created on or before this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        
                         # Pagination
-                        {"id": "starting_after", "label": "Cursor for pagination (start after) -- Invoice ID"},
-                        {"id": "ending_before", "label": "Cursor for pagination (end before) -- Invoice ID"},
-                        # Created Date Filter
-                        {"id": "created[gt]", "label": "Created after -- Unix Timestamp"},
-                        {"id": "created[gte]", "label": "Created on or after -- Unix Timestamp"},
-                        {"id": "created[lt]", "label": "Created before -- Unix Timestamp"},
-                        {"id": "created[lte]", "label": "Created on or before -- Unix Timestamp"},
-                        
-                        
+                        {"id": "starting_after", "label": "Start After", "description": "Get invoices after this ID (e.g., in_123456789)"},
+                        {"id": "ending_before", "label": "End Before", "description": "Get invoices before this ID (e.g., in_123456789)"}
                     ]
                 }
             }
@@ -837,6 +844,202 @@ OBJECT_TYPE = [
     }
 ]
 
+EVENT_TYPES = {
+    "account": {
+        "application": {
+            "authorized": "Occurs whenever a user authorizes an application",
+            "deauthorized": "Occurs whenever a user deauthorizes an application"
+        },
+        "external_account": {
+            "created": "Occurs whenever an external account is created",
+            "deleted": "Occurs whenever an external account is deleted",
+            "updated": "Occurs whenever an external account is updated"
+        },
+        "updated": "Occurs whenever an account status or property has changed"
+    },
+    "application_fee": {
+        "created": "Occurs whenever an application fee is created on a charge",
+        "refund": {
+            "updated": "Occurs whenever an application fee refund is updated"
+        },
+        "refunded": "Occurs whenever an application fee is refunded"
+    },
+    "balance": {
+        "available": "Occurs whenever your Stripe balance has been updated"
+    },
+    "billing_portal": {
+        "configuration": {
+            "created": "Occurs whenever a portal configuration is created",
+            "updated": "Occurs whenever a portal configuration is updated"
+        },
+        "session": {
+            "created": "Occurs whenever a portal session is created"
+        }
+    },
+    "billing": {
+        "alert": {
+            "triggered": "Occurs whenever your custom alert threshold is met"
+        },
+        "credit_balance_transaction": {
+            "created": "Occurs when a credit balance transaction is created"
+        },
+        "credit_grant": {
+            "created": "Occurs when a credit grant is created",
+            "updated": "Occurs when a credit grant is updated"
+        },
+        "meter": {
+            "created": "Occurs when a meter is created",
+            "deactivated": "Occurs when a meter is deactivated",
+            "reactivated": "Occurs when a meter is reactivated",
+            "updated": "Occurs when a meter is updated"
+        }
+    },
+    "capability": {
+        "updated": "Occurs whenever a capability has new requirements or a new status"
+    },
+    "cash_balance": {
+        "funds_available": "Occurs whenever there is a positive remaining cash balance"
+    },
+    "charge": {
+        "captured": "Occurs whenever a previously uncaptured charge is captured",
+        "dispute": {
+            "closed": "Occurs when a dispute is closed",
+            "created": "Occurs whenever a customer disputes a charge with their bank",
+            "funds_reinstated": "Occurs when funds are reinstated to your account after a dispute",
+            "funds_withdrawn": "Occurs when funds are removed from your account due to a dispute",
+            "updated": "Occurs when the dispute is updated"
+        },
+        "expired": "Occurs whenever an uncaptured charge expires",
+        "failed": "Occurs whenever a failed charge attempt occurs",
+        "pending": "Occurs whenever a pending charge is created",
+        "refund": {
+            "updated": "Occurs whenever a refund is updated on selected payment methods"
+        },
+        "refunded": "Occurs whenever a charge is refunded",
+        "succeeded": "Occurs whenever a charge is successful",
+        "updated": "Occurs whenever a charge description or metadata is updated"
+    },
+    "checkout": {
+        "session": {
+            "async_payment_failed": "Occurs when a payment intent using a delayed payment method fails",
+            "async_payment_succeeded": "Occurs when a payment intent using a delayed payment method succeeds",
+            "completed": "Occurs when a Checkout Session has been successfully completed",
+            "expired": "Occurs when a Checkout Session is expired"
+        }
+    },
+    "climate": {
+        "order": {
+            "canceled": "Occurs when a Climate order is canceled",
+            "created": "Occurs when a Climate order is created",
+            "delayed": "Occurs when a Climate order is delayed",
+            "delivered": "Occurs when a Climate order is delivered",
+            "product_substituted": "Occurs when a Climate order's product is substituted"
+        },
+        "product": {
+            "created": "Occurs when a Climate product is created",
+            "pricing_updated": "Occurs when a Climate product's pricing is updated"
+        }
+    },
+    "customer": {
+        "created": "Occurs whenever a new customer is created",
+        "deleted": "Occurs whenever a customer is deleted",
+        "updated": "Occurs whenever a customer is updated",
+        "discount": {
+            "created": "Occurs whenever a discount is created for a customer",
+            "deleted": "Occurs whenever a discount is removed from a customer",
+            "updated": "Occurs whenever a customer's discount is updated"
+        },
+        "subscription": {
+            "created": "Occurs whenever a customer subscribes to a plan",
+            "deleted": "Occurs whenever a customer's subscription is canceled",
+            "paused": "Occurs whenever a customer's subscription is paused",
+            "resumed": "Occurs whenever a customer's subscription is resumed",
+            "trial_will_end": "Occurs three days before a subscription's trial period is scheduled to end",
+            "updated": "Occurs whenever a subscription is updated"
+        },
+        "tax_id": {
+            "created": "Occurs whenever a tax ID is created for a customer",
+            "deleted": "Occurs whenever a tax ID is deleted from a customer",
+            "updated": "Occurs whenever a customer's tax ID is updated"
+        }
+    },
+    "invoice": {
+        "created": "Occurs whenever a new invoice is created",
+        "deleted": "Occurs whenever an invoice is deleted",
+        "finalized": "Occurs whenever an invoice is finalized",
+        "marked_uncollectible": "Occurs whenever an invoice is marked uncollectible",
+        "paid": "Occurs whenever an invoice is paid",
+        "payment_action_required": "Occurs whenever an invoice requires payment action",
+        "payment_failed": "Occurs whenever an invoice payment attempt fails",
+        "payment_succeeded": "Occurs whenever an invoice payment attempt succeeds",
+        "sent": "Occurs whenever an invoice is sent",
+        "upcoming": "Occurs whenever an upcoming invoice is created",
+        "updated": "Occurs whenever an invoice is updated",
+        "voided": "Occurs whenever an invoice is voided"
+    },
+    "payment_intent": {
+        "amount_capturable_updated": "Occurs whenever a payment intent's amount_capturable changes",
+        "canceled": "Occurs whenever a payment intent is canceled",
+        "created": "Occurs whenever a new payment intent is created",
+        "partially_funded": "Occurs whenever a payment intent is partially funded",
+        "payment_failed": "Occurs whenever a payment intent's payment fails",
+        "processing": "Occurs whenever a payment intent is processing",
+        "requires_action": "Occurs whenever a payment intent requires action",
+        "succeeded": "Occurs whenever a payment intent succeeds"
+    },
+    "payout": {
+        "canceled": "Occurs whenever a payout is canceled",
+        "created": "Occurs whenever a new payout is created",
+        "failed": "Occurs whenever a payout fails",
+        "paid": "Occurs whenever a payout is paid",
+        "updated": "Occurs whenever a payout is updated"
+    },
+    "price": {
+        "created": "Occurs whenever a new price is created",
+        "deleted": "Occurs whenever a price is deleted",
+        "updated": "Occurs whenever a price is updated"
+    },
+    "product": {
+        "created": "Occurs whenever a new product is created",
+        "deleted": "Occurs whenever a product is deleted",
+        "updated": "Occurs whenever a product is updated"
+    },
+    "refund": {
+        "created": "Occurs whenever a new refund is created",
+        "updated": "Occurs whenever a refund is updated"
+    },
+    "subscription": {
+        "created": "Occurs whenever a new subscription is created",
+        "deleted": "Occurs whenever a subscription is canceled",
+        "paused": "Occurs whenever a subscription is paused",
+        "resumed": "Occurs whenever a subscription is resumed",
+        "trial_will_end": "Occurs three days before a subscription's trial period is scheduled to end",
+        "updated": "Occurs whenever a subscription is updated"
+    },
+    "tax": {
+        "calculation": {
+            "created": "Occurs whenever a tax calculation is created",
+            "updated": "Occurs whenever a tax calculation is updated"
+        },
+        "registration": {
+            "created": "Occurs whenever a tax registration is created",
+            "updated": "Occurs whenever a tax registration is updated"
+        },
+        "transaction": {
+            "created": "Occurs whenever a tax transaction is created",
+            "updated": "Occurs whenever a tax transaction is updated"
+        }
+    },
+    "transfer": {
+        "created": "Occurs whenever a new transfer is created",
+        "failed": "Occurs whenever a transfer fails",
+        "paid": "Occurs whenever a transfer is paid",
+        "reversed": "Occurs whenever a transfer is reversed",
+        "updated": "Occurs whenever a transfer is updated"
+    }
+}
+
+EVENT_TYPES_OBJ = []
 
 CREATE_OBJECT_TYPE = []
 UPDATE_OBJECT_TYPE = []
@@ -861,19 +1064,180 @@ for obj in OBJECT_TYPE:
                 LIST_OBJECT_TYPE.append(object_type)
             else:
                 CUSTOME_OBJECT_TYPE.append(object_type)
+for obj in EVENT_TYPES:
+    EVENT_TYPES_OBJ.append(obj)
 
-print("CREATE_OBJECT_TYPE",CREATE_OBJECT_TYPE)
-print("UPDATE_OBJECT_TYPE",UPDATE_OBJECT_TYPE)
-print("GET_OBJECT_TYPE ",GET_OBJECT_TYPE)
-print("LIST_OBJECT_TYPE",LIST_OBJECT_TYPE)
-print("CUSTOME_OBJECT_TYPE",CUSTOME_OBJECT_TYPE)
+# print("CREATE_OBJECT_TYPE",CREATE_OBJECT_TYPE)
+# print("UPDATE_OBJECT_TYPE",UPDATE_OBJECT_TYPE)
+# print("GET_OBJECT_TYPE ",GET_OBJECT_TYPE)
+# print("LIST_OBJECT_TYPE",LIST_OBJECT_TYPE)
+# print("CUSTOME_OBJECT_TYPE",CUSTOME_OBJECT_TYPE)
 
 
 __all__ = ["OBJECT_TYPE", "CREATE_OBJECT_TYPE", "UPDATE_OBJECT_TYPE", "GET_OBJECT_TYPE", "LIST_OBJECT_TYPE", "CUSTOME_OBJECT_TYPE"]
 
 
 
+print(EVENT_TYPES_OBJ)
 
+# Simple list of all possible event types
+EVENT_TYPES_LIST = [
+    # Account Events
+    "Default",
+    "account.application.authorized",
+    "account.application.deauthorized",
+    "account.external_account.created",
+    "account.external_account.deleted",
+    "account.external_account.updated",
+    "account.updated",
+    
+    # Application Fee Events
+    "application_fee.created",
+    "application_fee.refund.updated",
+    "application_fee.refunded",
+    
+    # Balance Events
+    "balance.available",
+    
+    # Billing Portal Events
+    "billing_portal.configuration.created",
+    "billing_portal.configuration.updated",
+    "billing_portal.session.created",
+    
+    # Billing Events
+    "billing.alert.triggered",
+    "billing.credit_balance_transaction.created",
+    "billing.credit_grant.created",
+    "billing.credit_grant.updated",
+    "billing.meter.created",
+    "billing.meter.deactivated",
+    "billing.meter.reactivated",
+    "billing.meter.updated",
+    
+    # Capability Events
+    "capability.updated",
+    
+    # Cash Balance Events
+    "cash_balance.funds_available",
+    
+    # Charge Events
+    "charge.captured",
+    "charge.dispute.closed",
+    "charge.dispute.created",
+    "charge.dispute.funds_reinstated",
+    "charge.dispute.funds_withdrawn",
+    "charge.dispute.updated",
+    "charge.expired",
+    "charge.failed",
+    "charge.pending",
+    "charge.refund.updated",
+    "charge.refunded",
+    "charge.succeeded",
+    "charge.updated",
+    
+    # Checkout Events
+    "checkout.session.async_payment_failed",
+    "checkout.session.async_payment_succeeded",
+    "checkout.session.completed",
+    "checkout.session.expired",
+    
+    # Climate Events
+    "climate.order.canceled",
+    "climate.order.created",
+    "climate.order.delayed",
+    "climate.order.delivered",
+    "climate.order.product_substituted",
+    "climate.product.created",
+    "climate.product.pricing_updated",
+    
+    # Customer Events
+    "customer.created",
+    "customer.deleted",
+    "customer.updated",
+    "customer.discount.created",
+    "customer.discount.deleted",
+    "customer.discount.updated",
+    "customer.subscription.created",
+    "customer.subscription.deleted",
+    "customer.subscription.paused",
+    "customer.subscription.resumed",
+    "customer.subscription.trial_will_end",
+    "customer.subscription.updated",
+    "customer.tax_id.created",
+    "customer.tax_id.deleted",
+    "customer.tax_id.updated",
+    
+    # Invoice Events
+    "invoice.created",
+    "invoice.deleted",
+    "invoice.finalized",
+    "invoice.marked_uncollectible",
+    "invoice.paid",
+    "invoice.payment_action_required",
+    "invoice.payment_failed",
+    "invoice.payment_succeeded",
+    "invoice.sent",
+    "invoice.upcoming",
+    "invoice.updated",
+    "invoice.voided",
+    
+    # Payment Intent Events
+    "payment_intent.amount_capturable_updated",
+    "payment_intent.canceled",
+    "payment_intent.created",
+    "payment_intent.partially_funded",
+    "payment_intent.payment_failed",
+    "payment_intent.processing",
+    "payment_intent.requires_action",
+    "payment_intent.succeeded",
+    
+    # Payout Events
+    "payout.canceled",
+    "payout.created",
+    "payout.failed",
+    "payout.paid",
+    "payout.updated",
+    
+    # Price Events
+    "price.created",
+    "price.deleted",
+    "price.updated",
+    
+    # Product Events
+    "product.created",
+    "product.deleted",
+    "product.updated",
+    
+    # Refund Events
+    "refund.created",
+    "refund.updated",
+    
+    # Subscription Events
+    "subscription.created",
+    "subscription.deleted",
+    "subscription.paused",
+    "subscription.resumed",
+    "subscription.trial_will_end",
+    "subscription.updated",
+    
+    # Tax Events
+    "tax.calculation.created",
+    "tax.calculation.updated",
+    "tax.registration.created",
+    "tax.registration.updated",
+    "tax.transaction.created",
+    "tax.transaction.updated",
+    
+    # Transfer Events
+    "transfer.created",
+    "transfer.failed",
+    "transfer.paid",
+    "transfer.reversed",
+    "transfer.updated"
+]
+
+# Update EVENT_TYPES_OBJ to use the flat list
+EVENT_TYPES_OBJ = EVENT_TYPES_LIST
 
 
 

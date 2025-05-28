@@ -2,12 +2,13 @@
 # IMPORTS
 # ============================================================================
 # Core Flask and request handling
+from dict import EVENT_TYPES_LIST
 from flask import request as flask_request
 from workflows_cdk import Response, Request
 from main import router
 
 # Application specific imports
-from dict import *  # TODO: Consider importing specific constants instead of *
+from dict import *
 import stripe
 
 # ============================================================================
@@ -33,7 +34,9 @@ base_schema = {
             "type": "string",
             "validation": {
                 "required": True
-            }
+            },
+            
+
         },
         # Object Type selector - Dynamic field that triggers schema updates
         {
@@ -146,7 +149,9 @@ def schema():
             "type": "string",
             "validation": {
                 "required": True
-            }
+            },
+            "description": f"{field.get('description')}"
+
         })
 
     # Process optional fields with special handling for specific object types
@@ -161,12 +166,38 @@ def schema():
                     "type":"object",
                     "fields":[
                         {
-                            "id":"types",
+                            "id":"Object_type",
                             "type":"string",
-                            "label":"Type"
+                            "label":"Type",
+                            "ui_options": {
+                                "ui_widget": "SelectWidget"
+                            },
+                            "choices": {
+                                "values": [
+                                                {"value":choice } for choice in EVENT_TYPES_LIST
+                                    ]
+                            }
                         }
+                       
                     ]
-                }
+                },
+                "description": f"{field.get('description')}"
+            })
+        elif field.get("id") == "delivery_success" and object_type == "event":
+            fields.append({
+                "id":f"{field.get('id')}",
+                "label": f"{field.get('label')}",
+                "type": "string",
+                "ui_options": {
+                    "ui_widget": "SelectWidget"
+                },
+                "choices": {
+                    "values": [
+                        {"value" : choice} for choice in ["Default", "True", "False"]
+                    ]
+                },
+                "description": f"{field.get('description')}"
+
             })
         
         # Special handling for product IDs field
@@ -184,7 +215,8 @@ def schema():
                             "label":"ID"
                         }
                     ]
-                }
+                },
+                "description": f"{field.get('description')}"
             })
 
         # Special handling for invoice fields (collection_method and status)
@@ -205,9 +237,26 @@ def schema():
                         "values": [
                             {"value": choice} for choice in invoice_fields_choice[field.get("id")]
                         ]
-                    }
+                    },
+                    "description": f"{field.get('description')}"
                 })
         elif field.get("id") == "type" and object_type == "balance_transaction":
+            doc = {"Default": "Default", "adjustment": "Adjustment", "advance": "Advance", "advance_funding": "Advance Funding", "anticipation_repayment": "Anticipation Repayment", "application_fee": "Application Fee", "application_fee_refund": "Application Fee Refund", "charge": "Charge", "climate_order_purchase": "Climate Order Purchase", "climate_order_refund": "Climate Order Refund", "connect_collection_transfer": "Connect Collection Transfer", "contribution": "Contribution", "issuing_authorization_hold": "Issuing Authorization Hold", "issuing_authorization_release": "Issuing Authorization Release", "issuing_dispute": "Issuing Dispute", "issuing_transaction": "Issuing Transaction", "obligation_outbound": "Obligation Outbound", "obligation_reversal_inbound": "Obligation Reversal Inbound", "payment": "Payment", "payment_failure_refund": "Payment Failure Refund", "payment_network_reserve_hold": "Payment Network Reserve Hold", "payment_network_reserve_release": "Payment Network Reserve Release", "payment_refund": "Payment Refund", "payment_reversal": "Payment Reversal", "payment_unreconciled": "Payment Unreconciled", "payout": "Payout", "payout_cancel": "Payout Cancel", "payout_failure": "Payout Failure", "payout_minimum_balance_hold": "Payout Minimum Balance Hold", "payout_minimum_balance_release": "Payout Minimum Balance Release", "refund": "Refund", "refund_failure": "Refund Failure", "reserve_transaction": "Reserve Transaction", "reserved_funds": "Reserved Funds", "stripe_fee": "Stripe Fee", "stripe_fx_fee": "Stripe FX Fee", "stripe_balance_payment_debit": "Stripe Balance Payment Debit", "stripe_balance_payment_debit_reversal": "Stripe Balance Payment Debit Reversal", "tax_fee": "Tax Fee", "topup": "Top Up", "topup_reversal": "Top Up Reversal", "transfer": "Transfer", "transfer_cancel": "Transfer Cancel", "transfer_failure": "Transfer Failure", "transfer_refund": "Transfer Refund"}
+            fields.append({
+                "id": f"{field.get('id')}",
+                "label": f"{field.get('label')}",
+                "type": "string",
+                "ui_options": {
+                    "ui_widget": "SelectWidget"
+                },
+                "choices": {
+                    "values": [
+                        {"value": choice, "label ": label} for choice, label in doc.items()
+                    ]
+                },
+                "description": f"{field.get('description')}"
+            })
+        elif field.get("id") == "currency" and object_type == "balance_transaction":
             fields.append({
                 "id":f"{field.get('id')}",
                 "label": f"{field.get('label')}",
@@ -217,9 +266,24 @@ def schema():
                 },
                 "choices": {
                     "values": [
-                        {"value" : choice } for choice in ["None","adjustment", "advance", "advance_funding", "anticipation_repayment", "application_fee", "application_fee_refund", "charge", "climate_order_purchase", "climate_order_refund", "connect_collection_transfer", "contribution", "issuing_authorization_hold", "issuing_authorization_release", "issuing_dispute", "issuing_transaction", "obligation_outbound", "obligation_reversal_inbound", "payment", "payment_failure_refund", "payment_network_reserve_hold", "payment_network_reserve_release", "payment_refund", "payment_reversal", "payment_unreconciled", "payout", "payout_cancel", "payout_failure", "payout_minimum_balance_hold", "payout_minimum_balance_release", "refund", "refund_failure", "reserve_transaction", "reserved_funds", "stripe_fee", "stripe_fx_fee", "stripe_balance_payment_debit", "stripe_balance_payment_debit_reversal", "tax_fee", "topup", "topup_reversal", "transfer", "transfer_cancel", "transfer_failure", "transfer_refund"]
+                        {"value" : choice } for choice in [ "Default",
+                            "usd", "aed", "afn", "all", "amd", "ang", "aoa", "ars", "aud", "awg", "azn", 
+                            "bam", "bbd", "bdt", "bgn", "bif", "bmd", "bnd", "bob", "brl", "bsd", "bwp", 
+                            "byn", "bzd", "cad", "cdf", "chf", "clp", "cny", "cop", "crc", "cve", "czk", 
+                            "djf", "dkk", "dop", "dzd", "egp", "etb", "eur", "fjd", "fkp", "gbp", "gel", 
+                            "gip", "gmd", "gnf", "gtq", "gyd", "hkd", "hnl", "htg", "huf", "idr", "ils", 
+                            "inr", "isk", "jmd", "jpy", "kes", "kgs", "khr", "kmf", "krw", "kyd", "kzt", 
+                            "lak", "lbp", "lkr", "lrd", "lsl", "mad", "mdl", "mga", "mkd", "mmk", "mnt", 
+                            "mop", "mur", "mvr", "mwk", "mxn", "myr", "mzn", "nad", "ngn", "nio", "nok", 
+                            "npr", "nzd", "pab", "pen", "pgk", "php", "pkr", "pln", "pyg", "qar", "ron", 
+                            "rsd", "rub", "rwf", "sar", "sbd", "scr", "sek", "sgd", "shp", "sle", "sos", 
+                            "srd", "std", "szl", "thb", "tjs", "top", "try", "ttd", "twd", "tzs", "uah", 
+                            "ugx", "uyu", "uzs", "vnd", "vuv", "wst", "xaf", "xcd", "xcg", "xof", "xpf", 
+                            "yer", "zar", "zmw"
+                        ]
                     ]
-                }
+                },
+                "description": f"{field.get('description')}"
 
             })
         elif field.get("id") in ["shippable", "active"] and object_type == "product":
@@ -232,9 +296,10 @@ def schema():
                 },
                 "choices": {
                     "values": [
-                        {"value" : choice } for choice in ["None", "True", "False"]
+                        {"value" : choice } for choice in ["Default", "True", "False"]
                     ]
-                }
+                },
+                "description": f"{field.get('description')}"
 
             })
         
@@ -243,7 +308,8 @@ def schema():
             fields.append({
                 "id": f"{field.get('id')}",
                 "label": f"{field.get('label')}",
-                "type": "string"
+                "type": "string",
+                "description": f"{field.get('description')}"
             })
 
     # Construct and return final schema
@@ -322,8 +388,11 @@ def execute():
         # Remove type filter if it's set to "None"
         # This prevents sending invalid filter to Stripe API
         if bool(data.get("type")):
-            if data.get("type") == "None":
+            if data.get("type") == "Default":
                 del data["type"]
+        if bool(data.get("currency")):
+            if data.get("currency") == "Default":
+                del data["currency"]
             # else: keep the type filter as is
         
         # Execute balance transaction list API call
@@ -343,6 +412,12 @@ def execute():
                 final_types.append(typee.get("types"))
             del data["type"]
             data["types"] = final_types
+
+        if bool(data.get("delivery_success")):
+            delivery_sucess = data.get("delivery_success")
+            if delivery_sucess == "Default":
+                del data["delivery_success"]
+
         events = stripe.Event.list(**data)
         return Response(data=events)
     
@@ -364,9 +439,9 @@ def execute():
         
         # Handle optional filters
         # Remove filters if they're set to "None"
-        if data.get("status", "") == "None":
+        if data.get("status", "") == "Default":
             del data["status"]
-        if data.get("shippable", "") == "None":
+        if data.get("shippable", "") == "Default":
             del data["shippable"]
 
         products = stripe.Product.list(**data)
@@ -379,9 +454,9 @@ def execute():
     # Removes None values from optional filters to prevent invalid API calls
     if object_type == "invoice":
         # Remove None values from optional parameters
-        if data.get("status") == "None":
+        if data.get("status") == "Default":
             del data["status"]
-        if data.get("collection_method") == "None":
+        if data.get("collection_method") == "Default":
             del data["collection_method"]
         invoices = stripe.Invoice.list(**data)
         return Response(data=invoices)
