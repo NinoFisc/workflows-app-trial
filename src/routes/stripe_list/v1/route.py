@@ -6,6 +6,7 @@ from dict import EVENT_TYPES_LIST
 from flask import request as flask_request
 from workflows_cdk import Response, Request
 from main import router
+from datetime import datetime
 
 # Application specific imports
 from dict import *
@@ -107,6 +108,8 @@ def schema():
             if action_key == module:
                 required_fields = action_value.get("required_fields")
                 optional_fields = action_value.get("optional_fields")
+                ui_options = action_value.get("ui_options")
+    print(ui_options)
 
     # Build base fields (always present)
     fields = [
@@ -157,7 +160,27 @@ def schema():
     # Process optional fields with special handling for specific object types
     for field in optional_fields:
         # Special handling for event type field
-        if field.get("id") == "type" and object_type == "event":
+        if field.get("id").startswith("created"):
+            fields.append({
+            "id": f"{field.get('id')}",
+            "label": f"{field.get('label')}",
+            "type": "string",
+            "validation": {
+                "pattern":  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+            },
+            "description": f"{field.get('description')}",
+            "ui_options":{
+                "ui_widget": "DateTimeWidget",
+                "format": "YYYY-MM-DDTHH:mm:ss.SSSZ"
+            },
+            
+
+
+
+        })
+
+
+        elif field.get("id") == "type" and object_type == "event":
             fields.append({
                 "id": f"{field.get('id')}",
                 "label": f"{field.get('label')}",
@@ -315,8 +338,22 @@ def schema():
     # Construct and return final schema
     new_schema = {
         "metadata": {},
-        "fields": fields
+        "fields": fields,
+         "ui_options" : {
+             "ui_order": [
+                 "created[gt]",
+                 "created[gte]",
+                 "created[lt]",
+                 "created[lte]",
+                 "delivery_success",
+                 "starting_after",
+                 "ending_before",
+                 "limit"
+             ]
+         }
     }
+
+    # print(new_schema)
 
     return Response(data={"schema": new_schema})
 
@@ -360,7 +397,15 @@ def execute():
     # Configure Stripe API with provided credentials
     stripe.api_key = api_key
 
-    # ============================================================================
+    # convert the date into UNIX Time stamp if needed:
+    for field in data:
+        if field.startswith("created"):
+            date = data.get(field)
+            dt = datetime.fromisoformat(date.replace("Z","+00:00"))
+            unix_timestamp = int(dt.timestamp())
+            data[field] = unix_timestamp
+    
+    # ===================================================================
     # OBJECT TYPE ROUTING
     # ============================================================================
     # Each object type has its own handling logic
@@ -417,7 +462,7 @@ def execute():
             delivery_sucess = data.get("delivery_success")
             if delivery_sucess == "Default":
                 del data["delivery_success"]
-
+        
         events = stripe.Event.list(**data)
         return Response(data=events)
     

@@ -137,10 +137,10 @@ OBJECT_TYPE = [
                         {"id": "email", "label": "Email", "description": "Find customers by email (e.g., customer@example.com)"},
                         
                         # Date Filters
-                        {"id": "created[gt]", "label": "Created After", "description": "Find customers created after this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[gte]", "label": "Created On or After", "description": "Find customers created on or after this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[lt]", "label": "Created Before", "description": "Find customers created before this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find customers created on or before this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[gt]", "label": "Created After", "description": "Find records created after this date. Example: To find records created after March 1, 2024, select that date in the calendar."},
+                        {"id": "created[gte]", "label": "Created On or After", "description": "Find records created on or after this date. Example: To find records created on or after March 1, 2024, select that date in the calendar."},
+                        {"id": "created[lt]", "label": "Created Before", "description": "Find records created before this date. Example: To find records created before March 1, 2024, select that date in the calendar."},
+                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find records created on or before this date. Example: To find records created on or before March 1, 2024, select that date in the calendar."},
                         
                         # Pagination
                         {"id": "starting_after", "label": "Start After", "description": "Get customers after this ID (e.g., cus_123456789)"},
@@ -148,7 +148,10 @@ OBJECT_TYPE = [
                         
                         # Test Clock
                         {"id": "test_clock", "label": "Test Clock", "description": "A special clock for testing time-dependent features. First, you need to create a test clock using the 'Create Test Clock' action. Then, you can use its ID here to filter results for that specific test time. This lets you simulate different dates and times in your test environment. For example, if you want to test what happens when a subscription renews in the future, create a test clock, advance it to that date, and use its ID here. This only works in test mode, not in live mode. Example: clock_123456789"}
-                    ]
+                    ],
+                    "ui_options": {
+                        "ui_order": ["limit", "email", "created[gt]", "created[gte]", "created[lt]", "created[lte]", "starting_after", "ending_before", "test_clock"]
+                    } 
                 }
             },
             {
@@ -275,10 +278,10 @@ OBJECT_TYPE = [
                         {"id": "customer", "label": "Customer ID", "description": "Find charges for a specific customer (e.g., cus_123456789)"},
                         
                         # Date Filters
-                        {"id": "created[gt]", "label": "Created After", "description": "Find charges created after this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[gte]", "label": "Created On or After", "description": "Find charges created on or after this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[lt]", "label": "Created Before", "description": "Find charges created before this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find charges created on or before this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[gt]", "label": "Created After", "description": "Find charges created after this date. Example: To find charges created after March 1, 2024, select that date in the calendar."},
+                        {"id": "created[gte]", "label": "Created On or After", "description": "Find charges created on or after this date. Example: To find charges created on or after March 1, 2024, select that date in the calendar."},
+                        {"id": "created[lt]", "label": "Created Before", "description": "Find charges created before this date. Example: To find charges created before March 1, 2024, select that date in the calendar."},
+                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find charges created on or before this date. Example: To find charges created on or before March 1, 2024, select that date in the calendar."},
                         
                         # Payment Intent Filter
                         {"id": "payment_intent", "label": "Payment Intent ID", "description": "Find charges for a specific payment intent (e.g., pi_123456789)"},
@@ -292,7 +295,10 @@ OBJECT_TYPE = [
                         
                         # Test Clock
                         {"id": "test_clock", "label": "Test Clock", "description": "A special clock for testing time-dependent features. First, you need to create a test clock using the 'Create Test Clock' action. Then, you can use its ID here to filter results for that specific test time. This lets you simulate different dates and times in your test environment. For example, if you want to test what happens when a subscription renews in the future, create a test clock, advance it to that date, and use its ID here. This only works in test mode, not in live mode. Example: clock_123456789"}
-                    ]
+                    ],
+                    "ui_options": {
+                        "ui_order": ["limit", "customer", "created[gt]", "created[gte]", "created[lt]", "created[lte]", "payment_intent", "starting_after", "ending_before", "transfer_group", "test_clock"]
+                    }
                 }
             },
             {
@@ -564,15 +570,19 @@ OBJECT_TYPE = [
                         {"id": "customer", "label": "Customer ID", "description": "Find payment intents for a specific customer (e.g., cus_123456789)"},
                         
                         # Date Filters
-                        {"id": "created[gt]", "label": "Created After", "description": "Find payment intents created after this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[gte]", "label": "Created On or After", "description": "Find payment intents created on or after this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[lt]", "label": "Created Before", "description": "Find payment intents created before this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find payment intents created on or before this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[gt]", "label": "Created After", "description": "Find payment intents created after this date. Example: To find payment intents created after March 1, 2024, select that date in the calendar."},
+                        {"id": "created[gte]", "label": "Created On or After", "description": "Find payment intents created on or after this date. Example: To find payment intents created on or after March 1, 2024, select that date in the calendar."},
+                        {"id": "created[lt]", "label": "Created Before", "description": "Find payment intents created before this date. Example: To find payment intents created before March 1, 2024, select that date in the calendar."},
+                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find payment intents created on or before this date. Example: To find payment intents created on or before March 1, 2024, select that date in the calendar."},
                         
                         # Pagination
                         {"id": "starting_after", "label": "Start After", "description": "Get payment intents after this ID (e.g., pi_123456789)"},
-                        {"id": "ending_before", "label": "End Before", "description": "Get payment intents before this ID (e.g., pi_123456789)"}
-                    ]
+                        {"id": "ending_before", "label": "End Before", "description": "Get payment intents before this ID (e.g., pi_123456789)"},
+                        {"id": "test_clock", "label": "Test Clock", "description": "A special clock for testing time-dependent features. First, you need to create a test clock using the 'Create Test Clock' action. Then, you can use its ID here to filter results for that specific test time. This lets you simulate different dates and times in your test environment. For example, if you want to test what happens when a subscription renews in the future, create a test clock, advance it to that date, and use its ID here. This only works in test mode, not in live mode. Example: clock_123456789"}
+                    ],
+                    "ui_options": {
+                        "ui_order": ["limit", "customer", "created[gt]", "created[gte]", "created[lt]", "created[lte]", "starting_after", "ending_before", "test_clock"]
+                    }
                 }
             },
             {
@@ -702,10 +712,10 @@ OBJECT_TYPE = [
                         {"id": "type", "label": "Transaction Type", "description": "Find transactions of a specific type (e.g., charge, refund, transfer)"},
                         
                         # Date Filters
-                        {"id": "created[gt]", "label": "Created After", "description": "Find transactions created after this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[gte]", "label": "Created On or After", "description": "Find transactions created on or after this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[lt]", "label": "Created Before", "description": "Find transactions created before this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find transactions created on or before this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[gt]", "label": "Created After", "description": "Find transactions created after this date. Example: To find transactions created after March 1, 2024, select that date in the calendar."},
+                        {"id": "created[gte]", "label": "Created On or After", "description": "Find transactions created on or after this date. Example: To find transactions created on or after March 1, 2024, select that date in the calendar."},
+                        {"id": "created[lt]", "label": "Created Before", "description": "Find transactions created before this date. Example: To find transactions created before March 1, 2024, select that date in the calendar."},
+                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find transactions created on or before this date. Example: To find transactions created on or before March 1, 2024, select that date in the calendar."},
                         
                         # Currency Filter
                         {"id": "currency", "label": "Currency", "description": "Find transactions in a specific currency in Three-letter ISO currency code, in lowercase (e.g., usd, eur)"},
@@ -716,7 +726,10 @@ OBJECT_TYPE = [
                         # Pagination
                         {"id": "starting_after", "label": "Start After", "description": "Get transactions after this ID (e.g., txn_123456789)"},
                         {"id": "ending_before", "label": "End Before", "description": "Get transactions before this ID (e.g., txn_123456789)"}
-                    ]
+                    ],
+                    "ui_options": {
+                        "ui_order": ["limit", "payout", "type", "created[gt]", "created[gte]", "created[lt]", "created[lte]", "currency", "source", "starting_after", "ending_before"]
+                    }
                 }
             },
             {
@@ -746,10 +759,10 @@ OBJECT_TYPE = [
                         {"id": "type", "label": "Event Type", "description": "Find specific types of events (e.g., charge.succeeded, payment_intent.created)"},
                         
                         # Date Filters
-                        {"id": "created[gt]", "label": "Created After", "description": "Find events created after this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[gte]", "label": "Created On or After", "description": "Find events created on or after this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[lt]", "label": "Created Before", "description": "Find events created before this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find events created on or before this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[gt]", "label": "Created After", "description": "Find events created after this date. Example: To find events created after March 1, 2024, select that date in the calendar."},
+                        {"id": "created[gte]", "label": "Created On or After", "description": "Find events created on or after this date. Example: To find events created on or after March 1, 2024, select that date in the calendar."},
+                        {"id": "created[lt]", "label": "Created Before", "description": "Find events created before this date. Example: To find events created before March 1, 2024, select that date in the calendar."},
+                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find events created on or before this date. Example: To find events created on or before March 1, 2024, select that date in the calendar."},
                         
                         # Delivery Status Filter
                         {"id": "delivery_success", "label": "Delivery Success", "description": "Find events by delivery status (true for successful, false for failed)"},
@@ -757,7 +770,10 @@ OBJECT_TYPE = [
                         # Pagination
                         {"id": "starting_after", "label": "Start After", "description": "Get events after this ID (e.g., evt_123456789)"},
                         {"id": "ending_before", "label": "End Before", "description": "Get events before this ID (e.g., evt_123456789)"}
-                    ]
+                    ],
+                    "ui_options": {
+                        "ui_order": [ "type", "created[gt]", "created[gte]", "created[lt]", "created[lte]", "delivery_success", "starting_after", "ending_before", "limit"]
+                    }
                 }
             },
             {
@@ -785,10 +801,10 @@ OBJECT_TYPE = [
                         {"id": "active", "label": "Active Status", "description": "Find active or inactive products (true for active, false for inactive)"},
                         
                         # Date Filters
-                        {"id": "created[gt]", "label": "Created After", "description": "Find products created after this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[gte]", "label": "Created On or After", "description": "Find products created on or after this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[lt]", "label": "Created Before", "description": "Find products created before this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find products created on or before this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[gt]", "label": "Created After", "description": "Find products created after this date. Example: To find products created after March 1, 2024, select that date in the calendar."},
+                        {"id": "created[gte]", "label": "Created On or After", "description": "Find products created on or after this date. Example: To find products created on or after March 1, 2024, select that date in the calendar."},
+                        {"id": "created[lt]", "label": "Created Before", "description": "Find products created before this date. Example: To find products created before March 1, 2024, select that date in the calendar."},
+                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find products created on or before this date. Example: To find products created on or before March 1, 2024, select that date in the calendar."},
                         
                         # IDs Filter
                         {"id": "ids", "label": "Product IDs", "description": "Find specific products by their IDs (e.g., prod_123456789, prod_987654321)"},
@@ -802,7 +818,10 @@ OBJECT_TYPE = [
                         # Pagination
                         {"id": "starting_after", "label": "Start After", "description": "Get products after this ID (e.g., prod_123456789)"},
                         {"id": "ending_before", "label": "End Before", "description": "Get products before this ID (e.g., prod_123456789)"}
-                    ]
+                    ],
+                    "ui_options": {
+                        "ui_order": ["limit", "active", "created[gt]", "created[gte]", "created[lt]", "created[lte]", "ids", "shippable", "url", "starting_after", "ending_before"]
+                    }
                 }
             }
         ]
@@ -829,15 +848,19 @@ OBJECT_TYPE = [
                         {"id": "collection_method", "label": "Collection Method", "description": "Find invoices by collection method (charge_automatically, send_invoice)"},
                         
                         # Date Filters
-                        {"id": "created[gt]", "label": "Created After", "description": "Find invoices created after this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[gte]", "label": "Created On or After", "description": "Find invoices created on or after this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[lt]", "label": "Created Before", "description": "Find invoices created before this date (e.g., 1609459200 for Jan 1, 2021)"},
-                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find invoices created on or before this date (e.g., 1609459200 for Jan 1, 2021)"},
+                        {"id": "created[gt]", "label": "Created After", "description": "Find invoices created after this date. Example: To find invoices created after March 1, 2024, select that date in the calendar."},
+                        {"id": "created[gte]", "label": "Created On or After", "description": "Find invoices created on or after this date. Example: To find invoices created on or after March 1, 2024, select that date in the calendar."},
+                        {"id": "created[lt]", "label": "Created Before", "description": "Find invoices created before this date. Example: To find invoices created before March 1, 2024, select that date in the calendar."},
+                        {"id": "created[lte]", "label": "Created On or Before", "description": "Find invoices created on or before this date. Example: To find invoices created on or before March 1, 2024, select that date in the calendar."},
                         
                         # Pagination
                         {"id": "starting_after", "label": "Start After", "description": "Get invoices after this ID (e.g., in_123456789)"},
-                        {"id": "ending_before", "label": "End Before", "description": "Get invoices before this ID (e.g., in_123456789)"}
-                    ]
+                        {"id": "ending_before", "label": "End Before", "description": "Get invoices before this ID (e.g., in_123456789)"},
+                        {"id": "test_clock", "label": "Test Clock", "description": "A special clock for testing time-dependent features. First, you need to create a test clock using the 'Create Test Clock' action. Then, you can use its ID here to filter results for that specific test time. This lets you simulate different dates and times in your test environment. For example, if you want to test what happens when a subscription renews in the future, create a test clock, advance it to that date, and use its ID here. This only works in test mode, not in live mode. Example: clock_123456789"}
+                    ],
+                    "ui_options": {
+                        "ui_order": ["limit", "customer", "status", "subscription", "collection_method", "created[gt]", "created[gte]", "created[lt]", "created[lte]", "starting_after", "ending_before", "test_clock"]
+                    }
                 }
             }
         ]
@@ -1078,7 +1101,7 @@ __all__ = ["OBJECT_TYPE", "CREATE_OBJECT_TYPE", "UPDATE_OBJECT_TYPE", "GET_OBJEC
 
 
 
-print(EVENT_TYPES_OBJ)
+# print(EVENT_TYPES_OBJ)
 
 # Simple list of all possible event types
 EVENT_TYPES_LIST = [
