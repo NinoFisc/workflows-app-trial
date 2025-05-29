@@ -231,11 +231,13 @@ def schema():
                 "type": "array",
                 "items":{
                     "type":"object",
+                    "label": "Product ID",
                     "fields":[
                         {
                             "id":"ids",
                             "type":"string",
-                            "label":"ID"
+                            "label": "ID",
+                            
                         }
                     ]
                 },
@@ -245,8 +247,8 @@ def schema():
         # Special handling for invoice fields (collection_method and status)
         elif field.get("id") in ["collection_method", "status"] and object_type == "invoice":
             invoice_fields_choice = {
-                "collection_method": ["charge_automatically", "send_invoice", "None"],
-                "status": ["draft", "open", "paid", "uncollectible", "void", "None"]
+                "collection_method": ["Default","charge_automatically", "send_invoice"],
+                "status": ["Default", "draft", "open", "paid", "uncollectible", "void"]
             }
             if field.get("id") in invoice_fields_choice:
                 fields.append({
@@ -339,18 +341,7 @@ def schema():
     new_schema = {
         "metadata": {},
         "fields": fields,
-         "ui_options" : {
-             "ui_order": [
-                 "created[gt]",
-                 "created[gte]",
-                 "created[lt]",
-                 "created[lte]",
-                 "delivery_success",
-                 "starting_after",
-                 "ending_before",
-                 "limit"
-             ]
-         }
+         "ui_options" : ui_options
     }
 
     # print(new_schema)
